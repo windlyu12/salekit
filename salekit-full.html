@@ -1,0 +1,1903 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NEWHOMES — Sale Kit Builder 2026 (A4 Portrait)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+  <style>
+    /* ========================================
+       NEWHOMES SALE KIT 2026 - STYLE SYSTEM
+       Modern Scandinavian Design
+    ======================================== */
+
+    :root {
+      /* A4 Dimensions (96 DPI screen) */
+      --a4w: 794px;
+      --a4h: 1123px;
+
+      /* Safe margin: 15mm = ~57px */
+      --margin: 57px;
+      --margin-mm: 15mm;
+
+      /* Grid: 12 columns, gutter 6mm = ~23px */
+      --gutter: 23px;
+      --cols: 12;
+
+      /* === COLOR SYSTEM === */
+      --bg: #ffffff;
+      --ink: #141414;
+      --ink-90: rgba(20,20,20,0.90);
+      --ink-82: rgba(20,20,20,0.82);
+      --ink-72: rgba(20,20,20,0.72);
+      --ink-62: rgba(20,20,20,0.62);
+      --ink-55: rgba(20,20,20,0.55);
+      --ink-45: rgba(20,20,20,0.45);
+
+      --brown: #A47C54;
+      --brown-18: rgba(164,124,84,0.18);
+      --brown-12: rgba(164,124,84,0.12);
+      --brown-08: rgba(164,124,84,0.08);
+
+      --sand: #F3EEE7;
+      --sand-50: rgba(243,238,231,0.50);
+
+      --white: #ffffff;
+      --white-16: rgba(255,255,255,0.16);
+      --white-12: rgba(255,255,255,0.12);
+      --white-10: rgba(255,255,255,0.10);
+
+      /* Frost panels */
+      --frost-bg: rgba(255,255,255,0.14);
+      --frost-border: rgba(255,255,255,0.18);
+
+      /* UI */
+      --sidebar: 380px;
+      --gap: 18px;
+
+      /* Logo */
+      --logoH: 34px;
+      --logoMaxW: 180px;
+
+      /* Spacing units (base 4mm = ~15px) */
+      --sp-1: 4px;   /* 1mm */
+      --sp-2: 8px;   /* 2mm */
+      --sp-3: 11px;  /* 3mm */
+      --sp-4: 15px;  /* 4mm - base unit */
+      --sp-6: 23px;  /* 6mm */
+      --sp-8: 30px;  /* 8mm */
+      --sp-10: 38px; /* 10mm */
+      --sp-12: 45px; /* 12mm */
+      --sp-16: 60px; /* 16mm */
+    }
+
+    /* ========================================
+       TYPOGRAPHY SYSTEM
+    ======================================== */
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--ink);
+    }
+
+    /* H1 Cover Title: 44pt, 700, line-height 1.04 */
+    .typo-h1-cover {
+      font-size: 44px;
+      font-weight: 700;
+      line-height: 1.04;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+
+    /* H2 Section: 22pt, 600, line-height 1.15 */
+    .typo-h2 {
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+    }
+
+    /* H3 Subsection: 14pt, 600, line-height 1.25 */
+    .typo-h3 {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--ink);
+    }
+
+    /* Kicker/Eyebrow: 9pt, 600, uppercase, tracking 0.20em */
+    .typo-kicker {
+      font-size: 9px;
+      font-weight: 600;
+      line-height: 1.3;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: var(--ink-62);
+    }
+
+    /* Subtitle: 10.5pt, 400-500, line-height 1.55-1.60 */
+    .typo-subtitle {
+      font-size: 10.5px;
+      font-weight: 400;
+      line-height: 1.58;
+      color: var(--ink-62);
+    }
+
+    /* Body: 11pt, 400, line-height 1.55 */
+    .typo-body {
+      font-size: 11px;
+      font-weight: 400;
+      line-height: 1.55;
+      color: var(--ink-62);
+    }
+
+    /* Body Strong: 11pt, 600 */
+    .typo-body-strong {
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.55;
+      color: var(--ink);
+    }
+
+    /* Caption/Meta: 9pt, 500 */
+    .typo-caption {
+      font-size: 9px;
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--ink-55);
+    }
+
+    /* CTA Label: 9pt, 700, uppercase */
+    .typo-cta-label {
+      font-size: 9px;
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-55);
+    }
+
+    /* CTA Value: 11pt, 700 */
+    .typo-cta-value {
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--ink-82);
+    }
+
+    /* ========================================
+       APP LAYOUT
+    ======================================== */
+
+    body {
+      background:
+        radial-gradient(1100px 720px at 16% 10%, rgba(164,124,84,.08), transparent 56%),
+        radial-gradient(900px 600px at 82% 92%, rgba(215,196,174,.12), transparent 58%),
+        var(--sand);
+    }
+
+    .app {
+      min-height: 100%;
+      display: flex;
+      gap: var(--gap);
+      padding: 18px;
+    }
+
+    /* ========================================
+       SIDEBAR
+    ======================================== */
+
+    .sidebar {
+      width: var(--sidebar);
+      min-width: var(--sidebar);
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 16px 50px rgba(0,0,0,0.10);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 18px;
+      height: calc(100vh - 36px);
+    }
+
+    .sb-head {
+      padding: 14px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      background: linear-gradient(180deg, rgba(243,238,231,0.55), rgba(255,255,255,0.92));
+    }
+
+    .sb-head .title {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-72);
+      font-weight: 700;
+    }
+
+    .sb-head .hint {
+      margin-top: 6px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--ink-55);
+    }
+
+    .sb-body {
+      padding: 14px;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .group {
+      border: 1px solid var(--brown-12);
+      background: rgba(255,255,255,0.85);
+      padding: 12px;
+    }
+
+    .group h4 {
+      margin-bottom: 10px;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-62);
+      font-weight: 700;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .row:last-child { margin-bottom: 0; }
+
+    label {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-55);
+    }
+
+    input[type="text"],
+    input[type="url"],
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid rgba(0,0,0,0.10);
+      background: #fff;
+      padding: 9px 10px;
+      font: inherit;
+      font-size: 12px;
+      outline: none;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      padding: 8px 0;
+    }
+
+    textarea {
+      min-height: 60px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    input[type="file"] {
+      display: block;
+      width: 100%;
+      padding: 9px 10px;
+      border: 1px solid rgba(0,0,0,0.10);
+      background: #fff;
+      font: inherit;
+      font-size: 11px;
+    }
+
+    .inline2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btnbar {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      flex: 1;
+      border: 1px solid rgba(0,0,0,0.10);
+      background: #fff;
+      padding: 10px 12px;
+      cursor: pointer;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      font-size: 11px;
+    }
+
+    .btn.primary {
+      border-color: var(--brown-18);
+      background: linear-gradient(180deg, rgba(164,124,84,0.14), rgba(164,124,84,0.06));
+      color: var(--ink-82);
+    }
+
+    .btn:active { transform: translateY(1px); }
+
+    /* Page selector */
+    .page-tabs {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .page-tab {
+      padding: 6px 10px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid var(--brown-12);
+      background: #fff;
+      cursor: pointer;
+      color: var(--ink-62);
+    }
+
+    .page-tab.active {
+      background: var(--brown);
+      color: #fff;
+      border-color: var(--brown);
+    }
+
+    /* ========================================
+       PREVIEW AREA
+    ======================================== */
+
+    .previewWrap {
+      flex: 1;
+      min-width: 520px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 6px 6px 18px 6px;
+      overflow: auto;
+      gap: 24px;
+    }
+
+    /* ========================================
+       PAGE BASE STYLES
+    ======================================== */
+
+    .page {
+      width: var(--a4w);
+      min-height: var(--a4h);
+      background: var(--bg);
+      border: 1px solid rgba(0,0,0,0.10);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.12);
+      flex-shrink: 0;
+    }
+
+    /* Safe margin frame */
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: var(--margin);
+      border: 1px solid var(--brown-12);
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    .page-inner {
+      padding: var(--margin);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ========================================
+       COVER PAGE (Page 1)
+    ======================================== */
+
+    .page-cover {
+      display: grid;
+      grid-template-rows: 74% 26%;
+      padding: var(--margin);
+      isolation: isolate;
+    }
+
+    .cover-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .cover-shade {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(180deg,
+        rgba(0,0,0,0.14) 0%,
+        rgba(0,0,0,0.06) 20%,
+        rgba(255,255,255,0.00) 50%,
+        rgba(255,255,255,0.30) 72%,
+        rgba(255,255,255,0.45) 100%);
+      pointer-events: none;
+    }
+
+    .cover-hero {
+      position: relative;
+      z-index: 2;
+    }
+
+    .cover-topbar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    .cover-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cover-logo {
+      height: var(--logoH);
+      width: auto;
+      max-width: var(--logoMaxW);
+      object-fit: contain;
+      display: none;
+      filter: drop-shadow(0 10px 16px rgba(0,0,0,0.22));
+    }
+    .cover-logo.is-on { display: block; }
+
+    .cover-brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.05;
+      text-shadow: 0 8px 16px rgba(0,0,0,0.30);
+    }
+
+    .cover-brand-name {
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: rgba(255,255,255,0.96);
+    }
+
+    .cover-brand-tagline {
+      margin-top: 2px;
+      font-size: 10px;
+      color: rgba(255,255,255,0.78);
+      letter-spacing: 0.02em;
+    }
+
+    .cover-edition {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.38);
+      border: 1px solid rgba(255,255,255,0.45);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.10);
+      color: var(--ink-72);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 10px;
+      font-weight: 600;
+      backdrop-filter: blur(6px);
+    }
+
+    .cover-title-wrap {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: var(--sp-4);
+      z-index: 10;
+      display: grid;
+      gap: 10px;
+    }
+
+    .cover-kicker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 10px;
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.88);
+      text-shadow: 0 10px 18px rgba(0,0,0,0.30);
+    }
+
+    .cover-kicker::before {
+      content: "";
+      width: 32px;
+      height: 1px;
+      background: rgba(255,255,255,0.78);
+    }
+
+    .cover-h1 {
+      font-size: 44px;
+      line-height: 1.04;
+      font-weight: 700;
+      color: rgba(255,255,255,0.96);
+      text-shadow: 0 14px 24px rgba(0,0,0,0.30);
+    }
+
+    .cover-sub {
+      font-size: 12px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.84);
+      text-shadow: 0 12px 22px rgba(0,0,0,0.26);
+      max-width: 680px;
+    }
+
+    .accent-line {
+      width: 170px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--brown), rgba(215,196,174,0.55));
+      margin-top: 4px;
+    }
+
+    /* Cover Bottom CTA */
+    .cover-bottom {
+      position: relative;
+      z-index: 2;
+      padding: var(--sp-4) 0 0 0;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: var(--sp-4);
+    }
+
+    .cover-cta-panel {
+      border: 1px solid var(--frost-border);
+      background: var(--frost-bg);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.10);
+      backdrop-filter: blur(10px);
+      padding: var(--sp-4);
+    }
+
+    .cover-cta-left {
+      display: flex;
+      gap: var(--sp-4);
+      align-items: center;
+    }
+
+    .cover-qr-box {
+      width: 100px;
+      height: 100px;
+      border: 1px solid rgba(255,255,255,0.24);
+      background: rgba(255,255,255,0.16);
+      overflow: hidden;
+      flex-shrink: 0;
+      backdrop-filter: blur(8px);
+    }
+
+    .cover-qr-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .cover-cta-text {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .cover-cta-title {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-72);
+      font-weight: 700;
+    }
+
+    .cover-cta-desc {
+      font-size: 11px;
+      line-height: 1.55;
+      color: var(--ink-62);
+    }
+
+    .cover-cta-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .cover-cta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.10);
+      backdrop-filter: blur(8px);
+    }
+
+    .cover-cta-row .k {
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-55);
+    }
+
+    .cover-cta-row .v {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ink-82);
+    }
+
+    .cover-minifoot {
+      margin-top: 4px;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-45);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 2px;
+    }
+
+    .cover-minifoot b {
+      color: var(--ink-62);
+      font-weight: 700;
+    }
+
+    /* ========================================
+       MODULE A - SECTION HEADER
+    ======================================== */
+
+    .mod-section-header {
+      margin-bottom: var(--sp-10);
+    }
+
+    .mod-section-header .kicker {
+      margin-bottom: var(--sp-2);
+    }
+
+    .mod-section-header h2 {
+      margin-bottom: var(--sp-3);
+    }
+
+    .mod-section-header .caption {
+      max-width: 480px;
+    }
+
+    /* ========================================
+       MODULE B - TWO COLUMN
+    ======================================== */
+
+    .mod-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-6);
+      margin-bottom: var(--sp-12);
+    }
+
+    .mod-two-col-content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-4);
+    }
+
+    .mod-two-col-visual {
+      background: var(--sand);
+      min-height: 200px;
+      overflow: hidden;
+    }
+
+    .mod-two-col-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ========================================
+       MODULE C - PROCESS STEPS
+    ======================================== */
+
+    .mod-process {
+      margin-bottom: var(--sp-12);
+    }
+
+    .mod-process-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .mod-process-item {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: var(--sp-4);
+      padding: var(--sp-4) 0;
+      border-bottom: 1px solid var(--brown-12);
+    }
+
+    .mod-process-item:last-child {
+      border-bottom: none;
+    }
+
+    .mod-process-num {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--brown);
+      line-height: 1;
+    }
+
+    .mod-process-content h3 {
+      margin-bottom: var(--sp-2);
+    }
+
+    /* ========================================
+       MODULE D - Q&A
+    ======================================== */
+
+    .mod-qa {
+      margin-bottom: var(--sp-12);
+    }
+
+    .mod-qa-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .mod-qa-item {
+      padding: var(--sp-4) 0;
+      border-bottom: 1px solid var(--brown-12);
+    }
+
+    .mod-qa-item:last-child {
+      border-bottom: none;
+    }
+
+    .mod-qa-q {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: var(--sp-2);
+    }
+
+    .mod-qa-a {
+      font-size: 11px;
+      line-height: 1.55;
+      color: var(--ink-62);
+    }
+
+    /* ========================================
+       MODULE E - STYLE CARDS
+    ======================================== */
+
+    .mod-styles {
+      margin-bottom: var(--sp-12);
+    }
+
+    .mod-styles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-4);
+    }
+
+    .mod-style-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mod-style-img {
+      aspect-ratio: 4/3;
+      background: var(--sand);
+      overflow: hidden;
+    }
+
+    .mod-style-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .mod-style-name {
+      padding: var(--sp-3) 0;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 0.04em;
+    }
+
+    /* ========================================
+       MODULE F - CASE STUDY
+    ======================================== */
+
+    .mod-case {
+      margin-bottom: var(--sp-12);
+    }
+
+    .mod-case-hero {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--sand);
+      overflow: hidden;
+      margin-bottom: var(--sp-4);
+    }
+
+    .mod-case-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .mod-case-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-3);
+      margin-bottom: var(--sp-4);
+    }
+
+    .mod-case-thumb {
+      aspect-ratio: 4/3;
+      background: var(--sand);
+      overflow: hidden;
+    }
+
+    .mod-case-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .mod-case-meta {
+      display: flex;
+      gap: var(--sp-6);
+      padding: var(--sp-3) 0;
+      border-top: 1px solid var(--brown-12);
+    }
+
+    .mod-case-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    /* ========================================
+       MODULE G - PARTNER/MATERIAL BAR
+    ======================================== */
+
+    .mod-partners {
+      margin-bottom: var(--sp-12);
+    }
+
+    .mod-partner-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--sp-4);
+      align-items: center;
+    }
+
+    .mod-partner-logo {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.65;
+      filter: grayscale(100%);
+    }
+
+    .mod-partner-logo img {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+    }
+
+    .mod-material-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--sp-4);
+      margin-top: var(--sp-6);
+    }
+
+    .mod-material-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mod-material-img {
+      aspect-ratio: 1;
+      background: var(--sand);
+      overflow: hidden;
+    }
+
+    .mod-material-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .mod-material-name {
+      padding: var(--sp-2) 0;
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--ink-55);
+      letter-spacing: 0.04em;
+    }
+
+    /* ========================================
+       MODULE H - WARRANTY/QUALITY
+    ======================================== */
+
+    .mod-warranty {
+      margin-bottom: var(--sp-12);
+    }
+
+    .mod-warranty-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-3);
+    }
+
+    .mod-warranty-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--sp-3);
+    }
+
+    .mod-warranty-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mod-warranty-icon svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--brown);
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    /* ========================================
+       BULLET LIST
+    ======================================== */
+
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-2);
+    }
+
+    .bullet-list li {
+      position: relative;
+      padding-left: var(--sp-4);
+      font-size: 11px;
+      line-height: 1.55;
+      color: var(--ink-62);
+    }
+
+    .bullet-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 7px;
+      width: 4px;
+      height: 4px;
+      background: var(--brown);
+    }
+
+    /* ========================================
+       PAGE FOOTER
+    ======================================== */
+
+    .page-footer {
+      margin-top: auto;
+      padding-top: var(--sp-4);
+      border-top: 1px solid var(--brown-12);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .page-footer-brand {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-55);
+    }
+
+    .page-footer-num {
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--ink-45);
+    }
+
+    /* ========================================
+       PRINT STYLES
+    ======================================== */
+
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    @media print {
+      body { background: #fff !important; }
+      .sidebar { display: none !important; }
+      .app { padding: 0; }
+      .previewWrap { padding: 0; gap: 0; }
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        border: none;
+        box-shadow: none;
+        page-break-after: always;
+      }
+      .page:last-child {
+        page-break-after: auto;
+      }
+      .page::before { inset: var(--margin-mm); }
+    }
+
+    @media (max-width: 1100px) {
+      .app { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        min-width: 0;
+        position: relative;
+        top: auto;
+        height: auto;
+        max-height: 50vh;
+      }
+      .previewWrap {
+        justify-content: flex-start;
+        min-width: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sb-head">
+        <p class="title">Sale Kit Builder 2026</p>
+        <p class="hint">Modern Scandinavian • A4 Portrait • Modular System</p>
+      </div>
+
+      <div class="sb-body">
+        <!-- Page Selector -->
+        <div class="group">
+          <h4>Chọn trang</h4>
+          <div class="page-tabs" id="pageTabs">
+            <button class="page-tab active" data-page="cover">Cover</button>
+            <button class="page-tab" data-page="about">About</button>
+            <button class="page-tab" data-page="services">Services</button>
+            <button class="page-tab" data-page="process">Process</button>
+            <button class="page-tab" data-page="styles">Styles</button>
+            <button class="page-tab" data-page="case">Case Study</button>
+            <button class="page-tab" data-page="qa">Q&A</button>
+            <button class="page-tab" data-page="contact">Contact</button>
+          </div>
+        </div>
+
+        <!-- Logo -->
+        <div class="group">
+          <h4>Logo</h4>
+          <div class="row">
+            <label>Logo (Upload)</label>
+            <input id="logoFile" type="file" accept="image/*" />
+          </div>
+          <div class="row">
+            <label>Logo (URL)</label>
+            <input id="logoUrl" type="url" placeholder="https://...png" />
+          </div>
+          <div class="inline2">
+            <div class="row">
+              <label>Height</label>
+              <input id="logoH" type="range" min="22" max="60" step="1" value="34" />
+            </div>
+            <div class="row">
+              <label>Max width</label>
+              <input id="logoW" type="range" min="120" max="260" step="5" value="180" />
+            </div>
+          </div>
+          <div class="btnbar">
+            <button class="btn" id="btnClearLogo">Clear</button>
+          </div>
+        </div>
+
+        <!-- Cover Images -->
+        <div class="group">
+          <h4>Cover Images</h4>
+          <div class="row">
+            <label>Hero (Upload)</label>
+            <input id="heroFile" type="file" accept="image/*" />
+          </div>
+          <div class="row">
+            <label>Hero (URL)</label>
+            <input id="heroUrl" type="url" placeholder="https://...jpg" />
+          </div>
+          <div class="row">
+            <label>QR (Upload)</label>
+            <input id="qrFile" type="file" accept="image/*" />
+          </div>
+          <div class="row">
+            <label>QR (URL)</label>
+            <input id="qrUrl" type="url" placeholder="https://...png" />
+          </div>
+        </div>
+
+        <!-- Cover Text -->
+        <div class="group">
+          <h4>Cover Text</h4>
+          <div class="row">
+            <label>Brand name</label>
+            <input id="brandName" type="text" value="NEWHOMES" />
+          </div>
+          <div class="row">
+            <label>Tagline</label>
+            <input id="brandTagline" type="text" value="Interior Design • Build • Production" />
+          </div>
+          <div class="inline2">
+            <div class="row">
+              <label>Kicker</label>
+              <input id="kicker" type="text" value="Sale kit / Company profile" />
+            </div>
+            <div class="row">
+              <label>Edition</label>
+              <input id="edition" type="text" value="2026 Edition" />
+            </div>
+          </div>
+          <div class="row">
+            <label>Title line 1</label>
+            <input id="title1" type="text" value="Thiết kế & thi công" />
+          </div>
+          <div class="row">
+            <label>Title line 2</label>
+            <input id="title2" type="text" value="nội thất trọn gói" />
+          </div>
+          <div class="row">
+            <label>Subtitle</label>
+            <textarea id="subtitle">Phong cách hiện đại, tối ưu công năng và chất lượng hoàn thiện cho căn hộ và nhà ở.</textarea>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="group">
+          <h4>CTA Info</h4>
+          <div class="row">
+            <label>CTA title</label>
+            <input id="ctaTitle" type="text" value="Liên hệ nhanh" />
+          </div>
+          <div class="row">
+            <label>CTA description</label>
+            <textarea id="ctaDesc">Quét QR Zalo OA để nhận tư vấn & báo giá theo nhu cầu trong 24h.</textarea>
+          </div>
+          <div class="inline2">
+            <div class="row">
+              <label>Hotline</label>
+              <input id="hotline" type="text" value="09xx xxx xxx" />
+            </div>
+            <div class="row">
+              <label>Website</label>
+              <input id="website" type="text" value="newhomes.vn" />
+            </div>
+          </div>
+          <div class="row">
+            <label>Zalo OA</label>
+            <input id="zalo" type="text" value="NewHomes Interior" />
+          </div>
+          <div class="inline2">
+            <div class="row">
+              <label>Footer left</label>
+              <input id="footerLeft" type="text" value="NEWHOMES • Hanoi" />
+            </div>
+            <div class="row">
+              <label>Footer right</label>
+              <input id="footerRight" type="text" value="Interior • Fit-out" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Export -->
+        <div class="group">
+          <h4>Xuất file</h4>
+          <div class="btnbar">
+            <button class="btn primary" id="btnExportAll">Export All (PDF)</button>
+            <button class="btn" id="btnPrint">Print</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- PREVIEW -->
+    <section class="previewWrap" id="previewWrap">
+
+      <!-- PAGE 1: COVER -->
+      <div class="page page-cover" id="pageCover" data-page="cover">
+        <img id="coverBg" class="cover-bg" alt="" crossorigin="anonymous" />
+        <div class="cover-shade"></div>
+
+        <div class="cover-hero">
+          <div class="cover-topbar">
+            <div class="cover-brand">
+              <img id="coverLogo" class="cover-logo" alt="Logo" crossorigin="anonymous" />
+              <div class="cover-brand-text">
+                <span class="cover-brand-name" id="pvBrandName">NEWHOMES</span>
+                <span class="cover-brand-tagline" id="pvBrandTagline">Interior Design • Build • Production</span>
+              </div>
+            </div>
+            <div class="cover-edition" id="pvEdition">2026 Edition</div>
+          </div>
+
+          <div class="cover-title-wrap">
+            <div class="cover-kicker" id="pvKicker">Sale kit / Company profile</div>
+            <h1 class="cover-h1">
+              <span id="pvTitle1">Thiết kế & thi công</span><br/>
+              <span id="pvTitle2">nội thất trọn gói</span>
+            </h1>
+            <p class="cover-sub" id="pvSubtitle">Phong cách hiện đại, tối ưu công năng và chất lượng hoàn thiện cho căn hộ và nhà ở.</p>
+            <div class="accent-line"></div>
+          </div>
+        </div>
+
+        <div class="cover-bottom">
+          <div class="cover-cta-panel cover-cta-left">
+            <div class="cover-qr-box">
+              <img id="coverQr" alt="QR" crossorigin="anonymous" />
+            </div>
+            <div class="cover-cta-text">
+              <div class="cover-cta-title" id="pvCtaTitle">Liên hệ nhanh</div>
+              <div class="cover-cta-desc" id="pvCtaDesc">Quét QR Zalo OA để nhận tư vấn & báo giá theo nhu cầu trong 24h.</div>
+            </div>
+          </div>
+          <div class="cover-cta-panel cover-cta-right">
+            <div class="cover-cta-row"><span class="k">Hotline</span><span class="v" id="pvHotline">09xx xxx xxx</span></div>
+            <div class="cover-cta-row"><span class="k">Website</span><span class="v" id="pvWebsite">newhomes.vn</span></div>
+            <div class="cover-cta-row"><span class="k">Zalo OA</span><span class="v" id="pvZalo">NewHomes Interior</span></div>
+            <div class="cover-minifoot">
+              <b id="pvFooterLeft">NEWHOMES • Hanoi</b>
+              <span id="pvFooterRight">Interior • Fit-out</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE 2: ABOUT -->
+      <div class="page" id="pageAbout" data-page="about">
+        <div class="page-inner">
+          <div class="mod-section-header">
+            <p class="typo-kicker kicker">Giới thiệu</p>
+            <h2 class="typo-h2">Về NewHomes</h2>
+            <p class="typo-caption caption">Đơn vị thiết kế và thi công nội thất trọn gói tại Việt Nam</p>
+            <div class="accent-line" style="margin-top: var(--sp-3);"></div>
+          </div>
+
+          <div class="mod-two-col">
+            <div class="mod-two-col-content">
+              <p class="typo-body">
+                NewHomes là đơn vị chuyên thiết kế và thi công nội thất cho căn hộ, nhà phố và biệt thự. Với hơn 8 năm kinh nghiệm, chúng tôi đã hoàn thành hơn 500 dự án trên khắp cả nước.
+              </p>
+              <p class="typo-body">
+                Triết lý của chúng tôi: Mang đến không gian sống hiện đại, tối ưu công năng với chi phí hợp lý nhất.
+              </p>
+              <ul class="bullet-list">
+                <li>Thiết kế theo phong cách Scandinavian, Modern, Minimalist</li>
+                <li>Sử dụng vật liệu cao cấp từ các thương hiệu uy tín</li>
+                <li>Đội ngũ thi công chuyên nghiệp, giám sát chặt chẽ</li>
+                <li>Bảo hành dài hạn, hỗ trợ bảo trì trọn đời</li>
+              </ul>
+            </div>
+            <div class="mod-two-col-visual">
+              <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80" alt="Interior" />
+            </div>
+          </div>
+
+          <div class="mod-warranty">
+            <h3 class="typo-h3" style="margin-bottom: var(--sp-4);">Cam kết chất lượng</h3>
+            <div class="mod-warranty-list">
+              <div class="mod-warranty-item">
+                <div class="mod-warranty-icon">
+                  <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <p class="typo-body">Báo giá minh bạch, không phát sinh chi phí ẩn</p>
+              </div>
+              <div class="mod-warranty-item">
+                <div class="mod-warranty-icon">
+                  <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <p class="typo-body">Đúng tiến độ cam kết hoặc hoàn tiền</p>
+              </div>
+              <div class="mod-warranty-item">
+                <div class="mod-warranty-icon">
+                  <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <p class="typo-body">Bảo hành 24 tháng công trình, bảo trì trọn đời</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="page-footer">
+            <span class="page-footer-brand">NEWHOMES</span>
+            <span class="page-footer-num">02 / 08</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE 3: SERVICES -->
+      <div class="page" id="pageServices" data-page="services">
+        <div class="page-inner">
+          <div class="mod-section-header">
+            <p class="typo-kicker kicker">Dịch vụ</p>
+            <h2 class="typo-h2">Dịch vụ của chúng tôi</h2>
+            <p class="typo-caption caption">Giải pháp nội thất toàn diện cho mọi không gian</p>
+            <div class="accent-line" style="margin-top: var(--sp-3);"></div>
+          </div>
+
+          <div class="mod-two-col">
+            <div class="mod-two-col-content">
+              <h3 class="typo-h3">Thiết kế nội thất</h3>
+              <p class="typo-body">Đội ngũ kiến trúc sư của chúng tôi sẽ tư vấn và thiết kế không gian sống phù hợp với phong cách và ngân sách của bạn.</p>
+              <ul class="bullet-list">
+                <li>Khảo sát hiện trạng miễn phí</li>
+                <li>Lên ý tưởng & bản vẽ 3D</li>
+                <li>Chỉnh sửa không giới hạn</li>
+                <li>Bàn giao bản vẽ thi công chi tiết</li>
+              </ul>
+            </div>
+            <div class="mod-two-col-visual">
+              <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80" alt="Design" />
+            </div>
+          </div>
+
+          <div class="mod-two-col">
+            <div class="mod-two-col-visual">
+              <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" alt="Construction" />
+            </div>
+            <div class="mod-two-col-content">
+              <h3 class="typo-h3">Thi công trọn gói</h3>
+              <p class="typo-body">Chúng tôi cung cấp dịch vụ thi công nội thất trọn gói từ A-Z, đảm bảo chất lượng và tiến độ.</p>
+              <ul class="bullet-list">
+                <li>Sản xuất nội thất tại xưởng riêng</li>
+                <li>Đội ngũ thợ lành nghề, được đào tạo bài bản</li>
+                <li>Giám sát công trình nghiêm ngặt</li>
+                <li>Nghiệm thu từng hạng mục</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="page-footer">
+            <span class="page-footer-brand">NEWHOMES</span>
+            <span class="page-footer-num">03 / 08</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE 4: PROCESS -->
+      <div class="page" id="pageProcess" data-page="process">
+        <div class="page-inner">
+          <div class="mod-section-header">
+            <p class="typo-kicker kicker">Quy trình</p>
+            <h2 class="typo-h2">Quy trình làm việc</h2>
+            <p class="typo-caption caption">6 bước để hoàn thiện không gian sống mơ ước</p>
+            <div class="accent-line" style="margin-top: var(--sp-3);"></div>
+          </div>
+
+          <div class="mod-process">
+            <div class="mod-process-list">
+              <div class="mod-process-item">
+                <div class="mod-process-num">01</div>
+                <div class="mod-process-content">
+                  <h3 class="typo-h3">Tiếp nhận & Khảo sát</h3>
+                  <p class="typo-body">Tiếp nhận yêu cầu, khảo sát hiện trạng và tìm hiểu nhu cầu sử dụng của gia chủ.</p>
+                </div>
+              </div>
+              <div class="mod-process-item">
+                <div class="mod-process-num">02</div>
+                <div class="mod-process-content">
+                  <h3 class="typo-h3">Lên ý tưởng thiết kế</h3>
+                  <p class="typo-body">Đề xuất concept, phong cách và bố cục tổng thể phù hợp với không gian.</p>
+                </div>
+              </div>
+              <div class="mod-process-item">
+                <div class="mod-process-num">03</div>
+                <div class="mod-process-content">
+                  <h3 class="typo-h3">Thiết kế 3D & Báo giá</h3>
+                  <p class="typo-body">Hoàn thiện bản vẽ 3D chi tiết, báo giá minh bạch từng hạng mục.</p>
+                </div>
+              </div>
+              <div class="mod-process-item">
+                <div class="mod-process-num">04</div>
+                <div class="mod-process-content">
+                  <h3 class="typo-h3">Ký hợp đồng</h3>
+                  <p class="typo-body">Thống nhất phương án, ký hợp đồng và đặt cọc để bắt đầu sản xuất.</p>
+                </div>
+              </div>
+              <div class="mod-process-item">
+                <div class="mod-process-num">05</div>
+                <div class="mod-process-content">
+                  <h3 class="typo-h3">Sản xuất & Thi công</h3>
+                  <p class="typo-body">Sản xuất đồ nội thất tại xưởng, thi công lắp đặt tại công trình.</p>
+                </div>
+              </div>
+              <div class="mod-process-item">
+                <div class="mod-process-num">06</div>
+                <div class="mod-process-content">
+                  <h3 class="typo-h3">Nghiệm thu & Bàn giao</h3>
+                  <p class="typo-body">Kiểm tra chất lượng, bàn giao công trình và hướng dẫn sử dụng, bảo quản.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="page-footer">
+            <span class="page-footer-brand">NEWHOMES</span>
+            <span class="page-footer-num">04 / 08</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE 5: STYLES -->
+      <div class="page" id="pageStyles" data-page="styles">
+        <div class="page-inner">
+          <div class="mod-section-header">
+            <p class="typo-kicker kicker">Phong cách</p>
+            <h2 class="typo-h2">Phong cách thiết kế</h2>
+            <p class="typo-caption caption">Đa dạng phong cách để bạn lựa chọn</p>
+            <div class="accent-line" style="margin-top: var(--sp-3);"></div>
+          </div>
+
+          <div class="mod-styles">
+            <div class="mod-styles-grid">
+              <div class="mod-style-card">
+                <div class="mod-style-img">
+                  <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=400&q=80" alt="Scandinavian" />
+                </div>
+                <div class="mod-style-name">Scandinavian</div>
+              </div>
+              <div class="mod-style-card">
+                <div class="mod-style-img">
+                  <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400&q=80" alt="Modern" />
+                </div>
+                <div class="mod-style-name">Modern</div>
+              </div>
+              <div class="mod-style-card">
+                <div class="mod-style-img">
+                  <img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=400&q=80" alt="Minimalist" />
+                </div>
+                <div class="mod-style-name">Minimalist</div>
+              </div>
+              <div class="mod-style-card">
+                <div class="mod-style-img">
+                  <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&q=80" alt="Industrial" />
+                </div>
+                <div class="mod-style-name">Industrial</div>
+              </div>
+              <div class="mod-style-card">
+                <div class="mod-style-img">
+                  <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=400&q=80" alt="Japanese" />
+                </div>
+                <div class="mod-style-name">Japanese Zen</div>
+              </div>
+              <div class="mod-style-card">
+                <div class="mod-style-img">
+                  <img src="https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?w=400&q=80" alt="Contemporary" />
+                </div>
+                <div class="mod-style-name">Contemporary</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mod-two-col" style="margin-bottom: 0;">
+            <div class="mod-two-col-content">
+              <h3 class="typo-h3">Tư vấn phong cách miễn phí</h3>
+              <p class="typo-body">Chưa biết chọn phong cách nào? Đội ngũ kiến trúc sư của chúng tôi sẽ giúp bạn tìm ra phong cách phù hợp nhất dựa trên:</p>
+              <ul class="bullet-list">
+                <li>Diện tích và đặc điểm không gian</li>
+                <li>Sở thích và lối sống của gia chủ</li>
+                <li>Ngân sách đầu tư</li>
+              </ul>
+            </div>
+            <div class="mod-two-col-visual" style="background: var(--sand); display: flex; align-items: center; justify-content: center;">
+              <p class="typo-kicker" style="color: var(--brown);">Liên hệ tư vấn ngay</p>
+            </div>
+          </div>
+
+          <div class="page-footer">
+            <span class="page-footer-brand">NEWHOMES</span>
+            <span class="page-footer-num">05 / 08</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE 6: CASE STUDY -->
+      <div class="page" id="pageCase" data-page="case">
+        <div class="page-inner">
+          <div class="mod-section-header">
+            <p class="typo-kicker kicker">Dự án tiêu biểu</p>
+            <h2 class="typo-h2">The Marq Apartment</h2>
+            <p class="typo-caption caption">Căn hộ 3 phòng ngủ • Quận 1, TP.HCM</p>
+            <div class="accent-line" style="margin-top: var(--sp-3);"></div>
+          </div>
+
+          <div class="mod-case">
+            <div class="mod-case-hero">
+              <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&q=80" alt="Case Study Hero" />
+            </div>
+            <div class="mod-case-grid">
+              <div class="mod-case-thumb">
+                <img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=400&q=80" alt="Detail 1" />
+              </div>
+              <div class="mod-case-thumb">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&q=80" alt="Detail 2" />
+              </div>
+              <div class="mod-case-thumb">
+                <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=400&q=80" alt="Detail 3" />
+              </div>
+            </div>
+            <div class="mod-case-meta">
+              <div class="mod-case-meta-item">
+                <span class="typo-cta-label">Diện tích</span>
+                <span class="typo-cta-value">120 m²</span>
+              </div>
+              <div class="mod-case-meta-item">
+                <span class="typo-cta-label">Phong cách</span>
+                <span class="typo-cta-value">Modern Scandinavian</span>
+              </div>
+              <div class="mod-case-meta-item">
+                <span class="typo-cta-label">Thời gian</span>
+                <span class="typo-cta-value">45 ngày</span>
+              </div>
+              <div class="mod-case-meta-item">
+                <span class="typo-cta-label">Ngân sách</span>
+                <span class="typo-cta-value">~350 triệu</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="typo-body" style="margin-bottom: var(--sp-4);">
+            Dự án căn hộ The Marq được thiết kế theo phong cách Modern Scandinavian với tông màu trung tính, tối ưu ánh sáng tự nhiên. Chủ nhà là cặp vợ chồng trẻ yêu thích sự tối giản nhưng vẫn ấm cúng.
+          </p>
+
+          <div class="page-footer">
+            <span class="page-footer-brand">NEWHOMES</span>
+            <span class="page-footer-num">06 / 08</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE 7: Q&A -->
+      <div class="page" id="pageQa" data-page="qa">
+        <div class="page-inner">
+          <div class="mod-section-header">
+            <p class="typo-kicker kicker">FAQ</p>
+            <h2 class="typo-h2">Câu hỏi thường gặp</h2>
+            <p class="typo-caption caption">Giải đáp những thắc mắc phổ biến của khách hàng</p>
+            <div class="accent-line" style="margin-top: var(--sp-3);"></div>
+          </div>
+
+          <div class="mod-qa">
+            <div class="mod-qa-list">
+              <div class="mod-qa-item">
+                <p class="mod-qa-q">Chi phí thiết kế nội thất trọn gói khoảng bao nhiêu?</p>
+                <p class="mod-qa-a">Chi phí dao động từ 2.5 - 5 triệu/m² tùy thuộc vào phong cách và chất liệu. Chúng tôi sẽ báo giá chi tiết sau khi khảo sát.</p>
+              </div>
+              <div class="mod-qa-item">
+                <p class="mod-qa-q">Thời gian hoàn thành một dự án là bao lâu?</p>
+                <p class="mod-qa-a">Thông thường từ 30-60 ngày tùy diện tích. Căn hộ 2PN khoảng 30-35 ngày, căn hộ 3PN khoảng 40-50 ngày.</p>
+              </div>
+              <div class="mod-qa-item">
+                <p class="mod-qa-q">NewHomes có thi công cho nhà phố và biệt thự không?</p>
+                <p class="mod-qa-a">Có, chúng tôi nhận thi công đầy đủ các loại hình: căn hộ, nhà phố, biệt thự, penthouse và cả showroom, văn phòng.</p>
+              </div>
+              <div class="mod-qa-item">
+                <p class="mod-qa-q">Chính sách bảo hành như thế nào?</p>
+                <p class="mod-qa-a">Bảo hành 24 tháng cho toàn bộ nội thất gỗ công nghiệp và 12 tháng cho các hạng mục khác. Hỗ trợ bảo trì trọn đời.</p>
+              </div>
+              <div class="mod-qa-item">
+                <p class="mod-qa-q">Có thể thanh toán theo tiến độ không?</p>
+                <p class="mod-qa-a">Chúng tôi áp dụng thanh toán theo tiến độ: 40% khi ký HĐ, 40% khi lắp đặt, 20% khi nghiệm thu bàn giao.</p>
+              </div>
+              <div class="mod-qa-item">
+                <p class="mod-qa-q">Nếu không ưng ý thiết kế thì sao?</p>
+                <p class="mod-qa-a">Chúng tôi hỗ trợ chỉnh sửa thiết kế không giới hạn cho đến khi bạn hài lòng trước khi tiến hành sản xuất.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="page-footer">
+            <span class="page-footer-brand">NEWHOMES</span>
+            <span class="page-footer-num">07 / 08</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE 8: CONTACT / BACK COVER -->
+      <div class="page" id="pageContact" data-page="contact">
+        <div class="page-inner" style="justify-content: center; align-items: center; text-align: center;">
+          <div style="max-width: 480px;">
+            <p class="typo-kicker" style="margin-bottom: var(--sp-4);">Liên hệ</p>
+            <h2 class="typo-h2" style="margin-bottom: var(--sp-4);">Bắt đầu dự án của bạn</h2>
+            <p class="typo-body" style="margin-bottom: var(--sp-8);">
+              Liên hệ ngay để được tư vấn miễn phí và nhận báo giá chi tiết cho không gian của bạn.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: var(--sp-4); margin-bottom: var(--sp-8);">
+              <div style="display: flex; justify-content: space-between; padding: var(--sp-4); border: 1px solid var(--brown-12);">
+                <span class="typo-cta-label">Hotline</span>
+                <span class="typo-cta-value">09xx xxx xxx</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: var(--sp-4); border: 1px solid var(--brown-12);">
+                <span class="typo-cta-label">Email</span>
+                <span class="typo-cta-value">hello@newhomes.vn</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: var(--sp-4); border: 1px solid var(--brown-12);">
+                <span class="typo-cta-label">Website</span>
+                <span class="typo-cta-value">newhomes.vn</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding: var(--sp-4); border: 1px solid var(--brown-12);">
+                <span class="typo-cta-label">Zalo OA</span>
+                <span class="typo-cta-value">NewHomes Interior</span>
+              </div>
+            </div>
+
+            <div style="width: 120px; height: 120px; margin: 0 auto var(--sp-4) auto; border: 1px solid var(--brown-12); background: var(--sand-50);">
+              <img id="contactQr" src="" alt="QR" style="width: 100%; height: 100%; object-fit: cover;" crossorigin="anonymous" />
+            </div>
+            <p class="typo-caption">Quét QR để liên hệ qua Zalo</p>
+          </div>
+
+          <div class="page-footer" style="position: absolute; bottom: var(--margin); left: var(--margin); right: var(--margin);">
+            <span class="page-footer-brand">NEWHOMES</span>
+            <span class="page-footer-num">08 / 08</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const $$ = sel => document.querySelectorAll(sel);
+
+    // Helper functions
+    function setText(id, value) {
+      const el = $(id);
+      if (el) el.textContent = value ?? "";
+    }
+
+    function fileToDataURL(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Logo handling
+    function showLogo(on) {
+      const img = $("coverLogo");
+      if (img) img.classList.toggle("is-on", !!on);
+    }
+
+    function clearLogo() {
+      const img = $("coverLogo");
+      if (img) img.removeAttribute("src");
+      showLogo(false);
+      $("logoUrl").value = "";
+      $("logoFile").value = "";
+    }
+
+    function setLogoSrc(src) {
+      const img = $("coverLogo");
+      if (!img) return;
+      img.onload = () => showLogo(true);
+      img.onerror = () => showLogo(false);
+      img.crossOrigin = "anonymous";
+      img.src = src;
+    }
+
+    // Image handling
+    function setImageSrc(imgId, src) {
+      const img = $(imgId);
+      if (img && src) {
+        img.crossOrigin = "anonymous";
+        img.src = src;
+      }
+    }
+
+    // Page tabs
+    function initPageTabs() {
+      const tabs = $$(".page-tab");
+      tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+          tabs.forEach(t => t.classList.remove("active"));
+          tab.classList.add("active");
+
+          const pageId = tab.dataset.page;
+          $$(".page").forEach(p => {
+            p.style.display = p.dataset.page === pageId ? "block" : "none";
+          });
+        });
+      });
+
+      // Show all pages by default for preview
+      $$(".page").forEach(p => p.style.display = "block");
+    }
+
+    // Bind all inputs
+    function bind() {
+      // Logo
+      $("logoFile").addEventListener("change", async (e) => {
+        const f = e.target.files?.[0];
+        if (!f) return;
+        const data = await fileToDataURL(f);
+        setLogoSrc(data);
+        $("logoUrl").value = "";
+      });
+
+      $("logoUrl").addEventListener("change", (e) => {
+        const url = e.target.value.trim();
+        if (url) setLogoSrc(url);
+      });
+
+      $("btnClearLogo").addEventListener("click", clearLogo);
+
+      $("logoH").addEventListener("input", (e) => {
+        document.documentElement.style.setProperty("--logoH", e.target.value + "px");
+      });
+
+      $("logoW").addEventListener("input", (e) => {
+        document.documentElement.style.setProperty("--logoMaxW", e.target.value + "px");
+      });
+
+      // Text bindings
+      $("brandName").addEventListener("input", e => setText("pvBrandName", e.target.value));
+      $("brandTagline").addEventListener("input", e => setText("pvBrandTagline", e.target.value));
+      $("kicker").addEventListener("input", e => setText("pvKicker", e.target.value));
+      $("edition").addEventListener("input", e => setText("pvEdition", e.target.value));
+      $("title1").addEventListener("input", e => setText("pvTitle1", e.target.value));
+      $("title2").addEventListener("input", e => setText("pvTitle2", e.target.value));
+      $("subtitle").addEventListener("input", e => setText("pvSubtitle", e.target.value));
+      $("ctaTitle").addEventListener("input", e => setText("pvCtaTitle", e.target.value));
+      $("ctaDesc").addEventListener("input", e => setText("pvCtaDesc", e.target.value));
+      $("hotline").addEventListener("input", e => setText("pvHotline", e.target.value));
+      $("website").addEventListener("input", e => setText("pvWebsite", e.target.value));
+      $("zalo").addEventListener("input", e => setText("pvZalo", e.target.value));
+      $("footerLeft").addEventListener("input", e => setText("pvFooterLeft", e.target.value));
+      $("footerRight").addEventListener("input", e => setText("pvFooterRight", e.target.value));
+
+      // Image uploads
+      $("heroFile").addEventListener("change", async (e) => {
+        const f = e.target.files?.[0];
+        if (!f) return;
+        const data = await fileToDataURL(f);
+        setImageSrc("coverBg", data);
+        $("heroUrl").value = "";
+      });
+
+      $("heroUrl").addEventListener("change", (e) => {
+        const url = e.target.value.trim();
+        if (url) setImageSrc("coverBg", url);
+      });
+
+      $("qrFile").addEventListener("change", async (e) => {
+        const f = e.target.files?.[0];
+        if (!f) return;
+        const data = await fileToDataURL(f);
+        setImageSrc("coverQr", data);
+        setImageSrc("contactQr", data);
+        $("qrUrl").value = "";
+      });
+
+      $("qrUrl").addEventListener("change", (e) => {
+        const url = e.target.value.trim();
+        if (url) {
+          setImageSrc("coverQr", url);
+          setImageSrc("contactQr", url);
+        }
+      });
+
+      // Export / Print
+      $("btnPrint").addEventListener("click", () => window.print());
+      $("btnExportAll").addEventListener("click", exportAllPDF);
+    }
+
+    // Initialize defaults
+    function initDefaults() {
+      setImageSrc("coverBg", "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=2400&q=80");
+      const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=420x420&margin=10&data=https%3A%2F%2Fzalo.me%2Fnewhomesinterior";
+      setImageSrc("coverQr", qrUrl);
+      setImageSrc("contactQr", qrUrl);
+      showLogo(false);
+    }
+
+    // Export all pages to PDF
+    async function exportAllPDF() {
+      const pages = $$(".page");
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
+
+      const pageW = 210, pageH = 297;
+
+      for (let i = 0; i < pages.length; i++) {
+        const page = pages[i];
+
+        // Show page temporarily
+        const originalDisplay = page.style.display;
+        page.style.display = "block";
+
+        await new Promise(r => setTimeout(r, 100));
+
+        const canvas = await html2canvas(page, {
+          scale: 2,
+          useCORS: true,
+          allowTaint: false,
+          backgroundColor: "#ffffff",
+          logging: false
+        });
+
+        const imgData = canvas.toDataURL("image/jpeg", 0.95);
+
+        if (i > 0) pdf.addPage();
+
+        const imgW = pageW;
+        const imgH = (canvas.height * imgW) / canvas.width;
+
+        if (imgH > pageH) {
+          const h = pageH;
+          const w = (canvas.width * h) / canvas.height;
+          const x = (pageW - w) / 2;
+          pdf.addImage(imgData, "JPEG", x, 0, w, h);
+        } else {
+          const y = (pageH - imgH) / 2;
+          pdf.addImage(imgData, "JPEG", 0, y, imgW, imgH);
+        }
+
+        page.style.display = originalDisplay;
+      }
+
+      pdf.save("newhomes-salekit-2026.pdf");
+    }
+
+    // Initialize
+    initPageTabs();
+    bind();
+    initDefaults();
+  </script>
+</body>
+</html>
