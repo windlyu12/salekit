@@ -412,7 +412,7 @@
       .stage{ padding:0; }
       .page{ box-shadow:none; cursor: default; }
 
-      /* Fix black squares: disable filters and backdrop-filter */
+      /* Fix black squares: disable filters, shadows, and backdrop-filter */
       .edition{
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
@@ -427,6 +427,23 @@
       }
       .hero::before{
         filter: none !important;
+      }
+      /* Disable text-shadow that causes black boxes */
+      .titleblock{
+        text-shadow: none !important;
+      }
+      .ctaFooter{
+        text-shadow: none !important;
+      }
+      /* Disable other box-shadows */
+      .kicker::before{
+        box-shadow: none !important;
+      }
+      .accentline{
+        box-shadow: none !important;
+      }
+      .ctaMark{
+        box-shadow: none !important;
       }
     }
 
