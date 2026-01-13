@@ -89,6 +89,32 @@
       font-size:13px;
     }
     textarea{ min-height:74px; resize:vertical; line-height:1.35; }
+    input[type="file"]{
+      width:100%;
+      border:1px dashed rgba(255,255,255,.20);
+      background:rgba(255,255,255,.04);
+      color:rgba(255,255,255,.82);
+      border-radius:12px;
+      padding:10px;
+      outline:none;
+      font-size:12px;
+    }
+    input[type="range"]{ width:100%; }
+    input[type="checkbox"]{
+      width:16px;
+      height:16px;
+      cursor:pointer;
+    }
+    .checkbox-row{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-bottom:6px;
+    }
+    .checkbox-row label{
+      margin-bottom:0;
+      cursor:pointer;
+    }
     .hint{
       margin-top:8px;
       font-size:12px;
@@ -132,6 +158,18 @@
       overflow:hidden;
     }
 
+    /* Background image layer */
+    .pageBg{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background-size:cover;
+      background-position:center;
+      background-repeat:no-repeat;
+      opacity:0.15;
+      z-index:0;
+    }
+
     /* light wash (subtle, still prints fine) */
     .pageWash{
       position:absolute;
@@ -141,6 +179,7 @@
         radial-gradient(120% 70% at 14% 10%, rgba(184,168,138,.10) 0%, rgba(184,168,138,0) 56%),
         radial-gradient(120% 70% at 12% 92%, rgba(214,207,196,.14) 0%, rgba(214,207,196,0) 62%);
       opacity:.9;
+      z-index:1;
     }
 
     /* Safe area 15mm */
@@ -254,19 +293,19 @@
       max-width: 170mm;
     }
 
-    /* The stack fills remaining height so sections "dàn đều" */
+    /* The stack fills remaining height */
     .stack{
       flex:1 1 auto;
       min-height:0;
       display:flex;
       flex-direction:column;
-      justify-content:space-between; /* distribute sections */
-      gap:0;
+      justify-content:flex-start;
+      gap:3mm; /* reduced gap between sections */
     }
 
     .sec{
       flex:0 0 auto;
-      padding:3.2mm 0; /* consistent spacing */
+      padding:1.6mm 0; /* halved spacing */
     }
 
     .secHead{
@@ -406,7 +445,16 @@
           <button id="btnReset">Reset</button>
         </div>
 
-        <div class="hint">Layout 1 cột, các section tự “dàn đều” theo chiều cao trang để không tràn.</div>
+        <div class="hint">Layout 1 cột, các section tự "dàn đều" theo chiều cao trang để không tràn.</div>
+      </div>
+
+      <div class="group">
+        <label>Background trang</label>
+        <input id="bgFile" type="file" accept="image/*">
+        <div style="margin-top:10px;">
+          <label>Opacity Background</label>
+          <input id="bgOpacity" type="range" min="0" max="100" value="15">
+        </div>
       </div>
 
       <div class="group">
@@ -486,6 +534,11 @@
 
       <div class="group">
         <label>Địa chỉ chi nhánh (3 dòng — chữ nhỏ)</label>
+
+        <div class="checkbox-row">
+          <input type="checkbox" id="b1show" checked>
+          <label for="b1show">Hiện CN 01</label>
+        </div>
         <div class="row">
           <div>
             <label>CN 01 — Tag</label>
@@ -496,7 +549,12 @@
             <input id="b1addr" type="text" value="">
           </div>
         </div>
-        <div class="row" style="margin-top:10px;">
+
+        <div class="checkbox-row" style="margin-top:10px;">
+          <input type="checkbox" id="b2show" checked>
+          <label for="b2show">Hiện CN 02</label>
+        </div>
+        <div class="row">
           <div>
             <label>CN 02 — Tag</label>
             <input id="b2tag" type="text" value="CN02">
@@ -506,7 +564,12 @@
             <input id="b2addr" type="text" value="">
           </div>
         </div>
-        <div class="row" style="margin-top:10px;">
+
+        <div class="checkbox-row" style="margin-top:10px;">
+          <input type="checkbox" id="b3show" checked>
+          <label for="b3show">Hiện CN 03</label>
+        </div>
+        <div class="row">
           <div>
             <label>CN 03 — Tag</label>
             <input id="b3tag" type="text" value="CN03">
@@ -527,6 +590,7 @@
     <!-- PREVIEW -->
     <main class="stage">
       <section class="page" aria-label="A4 Legal Public 1 Column Fit">
+        <div id="pageBg" class="pageBg" aria-hidden="true"></div>
         <div class="pageWash" aria-hidden="true"></div>
 
         <div class="safe">
@@ -634,15 +698,15 @@
                   <div class="secLine" aria-hidden="true"></div>
                 </div>
                 <div class="table">
-                  <div class="r">
+                  <div class="r" id="b1row">
                     <div class="btag" id="b1tagV" contenteditable="true">CN01</div>
                     <div class="baddr" id="b1addrV" contenteditable="true">—</div>
                   </div>
-                  <div class="r">
+                  <div class="r" id="b2row">
                     <div class="btag" id="b2tagV" contenteditable="true">CN02</div>
                     <div class="baddr" id="b2addrV" contenteditable="true">—</div>
                   </div>
-                  <div class="r">
+                  <div class="r" id="b3row">
                     <div class="btag" id="b3tagV" contenteditable="true">CN03</div>
                     <div class="baddr" id="b3addrV" contenteditable="true">—</div>
                   </div>
@@ -672,6 +736,35 @@
     function bindMirror(inputId, fn){
       $(inputId).addEventListener("input", (e) => fn(e.target.value ?? ""));
     }
+    function readFileToDataURL(file, cb){
+      const r = new FileReader();
+      r.onload = () => cb(String(r.result || ""));
+      r.onerror = () => alert("Không đọc được file. Hãy thử file khác.");
+      r.readAsDataURL(file);
+    }
+
+    // Background image
+    const pageBg = $("pageBg");
+    $("bgFile").addEventListener("change", (e) => {
+      const f = e.target.files && e.target.files[0];
+      if(!f) return;
+      readFileToDataURL(f, (src) => {
+        pageBg.style.backgroundImage = `url("${src}")`;
+      });
+    });
+
+    // Background opacity
+    $("bgOpacity").addEventListener("input", (e) => {
+      const opacity = Number(e.target.value || 15) / 100;
+      pageBg.style.opacity = opacity;
+    });
+
+    // Branch visibility toggles
+    ["1","2","3"].forEach(n => {
+      $("b"+n+"show").addEventListener("change", (e) => {
+        $("b"+n+"row").style.display = e.target.checked ? "" : "none";
+      });
+    });
 
     // Header / footer / title
     bindMirror("inHeaderLeft", v => $("hLeft").textContent = String(v).toUpperCase());
