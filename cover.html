@@ -257,9 +257,6 @@
       border-radius: 0;
       background: rgba(245,245,240,.62);
       border: 1px solid rgba(214,207,196,.80);
-      box-shadow: 0 10px 26px rgba(44,40,38,.10);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
       color: var(--silhouette);
       flex: 0 0 auto;
     }
@@ -411,6 +408,41 @@
       .panel{ display:none !important; }
       .stage{ padding:0; }
       .page{ box-shadow:none; cursor: default; }
+
+      /* Fix black squares: disable filters and shadows */
+      .edition{
+        background: #F5F5F0 !important;
+      }
+      .qr::before{
+        display: none !important;
+      }
+      .qr img{
+        box-shadow: none !important;
+        background: #fff !important;
+      }
+      .hero::before{
+        filter: none !important;
+      }
+      /* Disable text-shadow that causes black boxes */
+      .titleblock{
+        text-shadow: none !important;
+      }
+      .ctaFooter{
+        text-shadow: none !important;
+      }
+      /* Disable other box-shadows */
+      .kicker::before{
+        box-shadow: none !important;
+      }
+      .accentline{
+        box-shadow: none !important;
+      }
+      .ctaMark{
+        box-shadow: none !important;
+      }
+      .logo{
+        filter: none !important;
+      }
     }
 
     @media (max-width: 1100px){
