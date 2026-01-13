@@ -205,7 +205,7 @@
     .brand-left{
       display:flex;
       gap: 4.5mm;
-      align-items:flex-start;
+      align-items:center;
       min-width: 0;
     }
 
@@ -582,7 +582,7 @@
           <div class="topbar">
             <div class="brand-left">
               <img id="logoImg" class="logo is-empty" alt="Logo" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
-              <div class="brand">
+              <div id="brandBlock" class="brand">
                 <div id="brandName" class="brand-name">NEWHOMES</div>
                 <div id="brandTag" class="brand-tag">Interior Design • Build • Production</div>
               </div>
@@ -791,16 +791,16 @@
     // Overlay
     $("overlayRange").addEventListener("input", applyOverlay);
 
-    // Logo size (scales logo, brand name, and tagline proportionally)
+    // Logo size (logo height = 2x brand block height, brand centered)
     const defaultLogoSize = 10; // mm
-    const defaultBrandNameSize = 10.6; // pt
-    const defaultBrandTagSize = 8.8; // pt
+    const brandBlock = $("brandBlock");
 
     function applyLogoSize(size) {
-      const scale = size / defaultLogoSize;
+      const scale = size / defaultLogoSize / 2; // brand = logo / 2
       logoImg.style.height = size + "mm";
-      $("brandName").style.fontSize = (defaultBrandNameSize * scale) + "pt";
-      $("brandTag").style.fontSize = (defaultBrandTagSize * scale) + "pt";
+      // Scale brand block to 1/1.5 of logo height, centered vertically
+      brandBlock.style.transform = `scale(${scale})`;
+      brandBlock.style.transformOrigin = "left center";
     }
 
     $("logoSizeRange").addEventListener("input", (e) => {
