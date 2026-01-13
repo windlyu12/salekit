@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NewHomes — Cover (CTA Left Sunk, FIX upload/position)</title>
+
+  <!-- Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Espresso & Khaki Luxe (2026) */
+      --silhouette: #3D3635;
+      --charcoal: #5C534E;
+      --khaki: #B8A88A;
+      --cloud: #F5F5F0;
+      --espresso: #2C2826;
+      --linen: #D6CFC4;
+
+      --shadow: 0 18px 50px rgba(44,40,38,.10);
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: #0f0f12;
+      color: var(--espresso);
+    }
+
+    /* ===== Layout: dashboard + preview ===== */
+    .app{
+      min-height:100vh;
+      display:grid;
+      grid-template-columns: 380px 1fr;
+      gap: 18px;
+      padding: 18px;
+    }
+
+    .panel{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      padding: 16px;
+      color: rgba(255,255,255,.92);
+      box-shadow: 0 18px 45px rgba(0,0,0,.25);
+    }
+    .panel h2{
+      margin: 0 0 12px;
+      font-size: 14px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .panel .group{
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    label{
+      display:block;
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.70);
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+    input[type="text"], textarea{
+      width:100%;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.92);
+      border-radius: 12px;
+      padding: 10px 11px;
+      outline: none;
+      font-size: 13px;
+    }
+    textarea{ min-height: 86px; resize: vertical; }
+    input[type="file"]{
+      width:100%;
+      border: 1px dashed rgba(255,255,255,.20);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.82);
+      border-radius: 12px;
+      padding: 10px;
+      outline:none;
+      font-size: 12px;
+    }
+    input[type="range"]{ width:100%; }
+
+    .hint{
+      margin-top: 8px;
+      font-size: 12px;
+      line-height: 1.35;
+      color: rgba(255,255,255,.70);
+    }
+
+    .btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
+    button{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+      color: rgba(255,255,255,.92);
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+    button.primary{
+      background: rgba(184,168,138,.25);
+      border-color: rgba(184,168,138,.35);
+    }
+
+    .stage{
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding: 4px 0 30px;
+      overflow:auto;
+    }
+
+    /* ===== A4 page ===== */
+    .page{
+      width: 210mm;
+      height: 297mm;
+      background: var(--cloud);
+      box-shadow: var(--shadow);
+      border-radius: 0;
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+      cursor: grab;
+    }
+    .page.dragging{ cursor: grabbing; }
+
+    /* Hero FULL page, auto fit = cover */
+    .hero{
+      position:absolute;
+      inset:0;
+      background-image:
+        url("https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=2200&q=80");
+      background-size: cover;
+      background-position: 50% 45%;
+      background-repeat:no-repeat;
+      transform: translateZ(0);
+    }
+
+    /* Overlay: top readability + bottom readability (CTA sunk) */
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(120% 85% at 18% 16%,
+          rgba(61,54,53,.62) 0%,
+          rgba(61,54,53,.18) 55%,
+          rgba(61,54,53,0) 74%
+        ),
+        radial-gradient(120% 70% at 22% 92%,
+          rgba(61,54,53,.52) 0%,
+          rgba(61,54,53,.20) 52%,
+          rgba(61,54,53,0) 78%
+        ),
+        linear-gradient(
+          180deg,
+          rgba(61,54,53,.38) 0%,
+          rgba(61,54,53,.10) 36%,
+          rgba(61,54,53,.06) 58%,
+          rgba(61,54,53,.12) 78%,
+          rgba(61,54,53,.22) 100%
+        );
+      pointer-events:none;
+    }
+
+    /* Safe area 15mm */
+    .safe{
+      position:absolute;
+      inset: 15mm;
+      display:flex;
+      flex-direction:column;
+      pointer-events: none; /* keep drag on page */
+    }
+    .safe *{ pointer-events: auto; } /* allow inputs? inside preview none */
+
+    /* Topbar */
+    .topbar{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10mm;
+      color: rgba(245,245,240,.98);
+    }
+    .brand-left{
+      display:flex;
+      gap: 4.5mm;
+      align-items:flex-start;
+      min-width: 0;
+    }
+
+    /* Logo: no background */
+    .logo{
+      width: auto;
+      height: 10mm;
+      display:block;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 16px rgba(0,0,0,.18));
+    }
+    .logo.is-empty{
+      width: 28mm;
+      height: 10mm;
+      border: 1px dashed rgba(245,245,240,.55);
+      background: transparent;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap: 1.2mm;
+      min-width: 0;
+    }
+    .brand-name{
+      font-size: 10.6pt;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      line-height: 1.05;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .brand-tag{
+      font-size: 8.8pt;
+      font-weight: 500;
+      letter-spacing: .02em;
+      opacity: .88;
+      line-height: 1.1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Edition pill (keep bg) */
+    .edition{
+      padding: 3.2mm 5.0mm;
+      border-radius: 0;
+      background: rgba(245,245,240,.62);
+      border: 1px solid rgba(214,207,196,.80);
+      box-shadow: 0 10px 26px rgba(44,40,38,.10);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: var(--silhouette);
+      flex: 0 0 auto;
+    }
+    .edition span{
+      display:block;
+      font-size: 9pt;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    /* Title block */
+    .titleblock{
+      margin-top: 44mm;
+      max-width: 130mm;
+      color: rgba(245,245,240,.96);
+      text-shadow: 0 18px 40px rgba(0,0,0,.28);
+    }
+    .kicker{
+      display:flex;
+      align-items:center;
+      gap: 3.5mm;
+      margin-bottom: 4mm;
+      font-size: 9pt;
+      font-weight: 600;
+      letter-spacing: .20em;
+      text-transform: uppercase;
+      opacity: .92;
+    }
+    .kicker::before{
+      content:"";
+      width: 12mm;
+      height: 0.6mm;
+      background: rgba(184,168,138,.92);
+      box-shadow: 0 8px 22px rgba(0,0,0,.18);
+    }
+
+    .h1{
+      margin:0;
+      font-size: 44pt;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.04;
+      text-transform: uppercase;
+    }
+
+    .subtitle{
+      margin-top: 5mm;
+      font-size: 10.5pt;
+      font-weight: 400;
+      line-height: 1.58;
+      letter-spacing: .01em;
+      opacity: .92;
+      max-width: 118mm;
+    }
+
+    .accentline{
+      margin-top: 5mm;
+      width: 45mm;
+      height: 1.2mm;
+      background: var(--khaki);
+      opacity: .95;
+      box-shadow: 0 12px 24px rgba(0,0,0,.14);
+    }
+
+    /* CTA Footer Lockup (LEFT) */
+    .ctaFooter{
+      margin-top:auto;
+      display:flex;
+      align-items:flex-start;
+      gap: 6mm;
+      max-width: 155mm;
+      color: rgba(245,245,240,.96);
+      text-shadow: 0 14px 28px rgba(0,0,0,.28);
+    }
+
+    .qr{
+      width: 26mm;
+      height: 26mm;
+      flex: 0 0 auto;
+      position: relative;
+    }
+    .qr::before{
+      content:"";
+      position:absolute;
+      inset:-7mm;
+      background: radial-gradient(closest-side, rgba(245,245,240,.72), rgba(245,245,240,0));
+      filter: blur(1.5px);
+      opacity: .65;
+      pointer-events:none;
+    }
+    .qr img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      outline: 1px solid rgba(214,207,196,.80);
+      outline-offset: -1px;
+      background: rgba(255,255,255,.70);
+      box-shadow: 0 10px 26px rgba(44,40,38,.12);
+    }
+
+    .ctaText{
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      gap: 2.8mm;
+      padding-top: .8mm;
+    }
+
+    .ctaLine1{
+      font-size: 10.6pt;
+      font-weight: 600;
+      letter-spacing: .04em;
+      line-height: 1.25;
+      color: rgba(245,245,240,.96);
+      max-width: 118mm;
+    }
+
+    .ctaLine2{
+      font-size: 9.8pt;
+      font-weight: 500;
+      letter-spacing: .02em;
+      line-height: 1.25;
+      color: rgba(245,245,240,.92);
+      display:flex;
+      flex-wrap:wrap;
+      gap: 2.6mm;
+      align-items:baseline;
+    }
+    .ctaLine2 b{ font-weight: 700; color: rgba(245,245,240,.98); }
+    .dot{ opacity:.85; margin: 0 .8mm; }
+
+    .ctaMark{
+      width: 18mm;
+      height: 1mm;
+      background: rgba(184,168,138,.92);
+      opacity: .85;
+      margin-top: 0.8mm;
+    }
+
+    /* ===== Print ===== */
+    @page { size: A4; margin: 0; }
+    @media print{
+      body{ background: #fff; }
+      .app{ padding:0; grid-template-columns: 1fr; }
+      .panel{ display:none !important; }
+      .stage{ padding:0; }
+      .page{ box-shadow:none; cursor: default; }
+    }
+
+    @media (max-width: 1100px){
+      .app{ grid-template-columns: 1fr; }
+      .panel{ order: 2; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <!-- DASHBOARD -->
+    <aside class="panel">
+      <h2>Cover Editor</h2>
+
+      <div class="group">
+        <div class="row">
+          <div>
+            <label>Ảnh Hero (Upload)</label>
+            <input id="heroFile" type="file" accept="image/*">
+          </div>
+          <div>
+            <label>Logo (Upload)</label>
+            <input id="logoFile" type="file" accept="image/*">
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>QR Zalo OA (Upload)</label>
+            <input id="qrFile" type="file" accept="image/*">
+          </div>
+          <div>
+            <label>Edition</label>
+            <input id="editionInput" type="text" value="2026 EDITION">
+          </div>
+        </div>
+
+        <div class="hint">
+          Mẹo: Bạn có thể <b>kéo-thả trực tiếp trên bìa</b> để đổi vị trí ảnh Hero.<br>
+          Sliders Pos X/Y sẽ cập nhật theo thao tác kéo.
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="row">
+          <div>
+            <label>Kicker</label>
+            <input id="kickerInput" type="text" value="SALE KIT">
+          </div>
+          <div>
+            <label>Brand Name</label>
+            <input id="brandNameInput" type="text" value="NEWHOMES">
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>Brand Tagline</label>
+            <input id="brandTagInput" type="text" value="Interior Design • Build • Production">
+          </div>
+          <div>
+            <label>Title (2 dòng, dùng “|”)</label>
+            <input id="titleInput" type="text" value="NEWHOMES|INTERIOR">
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <label>Subtitle</label>
+          <textarea id="subtitleInput">Thiết kế • Thi công • Sản xuất nội thất trọn gói cho căn hộ và nhà ở. Tối ưu công năng, vật liệu chuẩn, tiến độ rõ ràng.</textarea>
+        </div>
+      </div>
+
+      <div class="group">
+        <label>CTA Line 1</label>
+        <input id="cta1Input" type="text" value="Quét QR để nhận tư vấn & báo giá nhanh">
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>Hotline</label>
+            <input id="hotlineInput" type="text" value="09xx xxx xxx">
+          </div>
+          <div>
+            <label>Website</label>
+            <input id="websiteInput" type="text" value="newhomes.vn">
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <label>Zalo OA label</label>
+          <input id="zaloLabelInput" type="text" value="Zalo OA">
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="row">
+          <div>
+            <label>Hero Pos X</label>
+            <input id="posXRange" type="range" min="0" max="100" value="50">
+          </div>
+          <div>
+            <label>Hero Pos Y</label>
+            <input id="posYRange" type="range" min="0" max="100" value="45">
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>Overlay Strength</label>
+            <input id="overlayRange" type="range" min="45" max="80" value="62">
+          </div>
+          <div>
+            <label>Export</label>
+            <div class="btns" style="margin-top:0;">
+              <button class="primary" id="exportBtn">Export PDF (A4)</button>
+              <button id="resetBtn">Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- PREVIEW -->
+    <main class="stage">
+      <section id="page" class="page" aria-label="A4 Cover">
+        <div id="hero" class="hero"></div>
+
+        <div class="safe">
+          <div class="topbar">
+            <div class="brand-left">
+              <img id="logoImg" class="logo is-empty" alt="Logo" />
+              <div class="brand">
+                <div id="brandName" class="brand-name">NEWHOMES</div>
+                <div id="brandTag" class="brand-tag">Interior Design • Build • Production</div>
+              </div>
+            </div>
+            <div class="edition"><span id="editionText">2026 EDITION</span></div>
+          </div>
+
+          <div class="titleblock">
+            <div id="kicker" class="kicker">SALE KIT</div>
+            <h1 id="title" class="h1">NEWHOMES<br>INTERIOR</h1>
+            <div id="subtitle" class="subtitle">
+              Thiết kế • Thi công • Sản xuất nội thất trọn gói cho căn hộ và nhà ở. Tối ưu công năng, vật liệu chuẩn, tiến độ rõ ràng.
+            </div>
+            <div class="accentline"></div>
+          </div>
+
+          <div class="ctaFooter" aria-label="CTA Footer">
+            <div class="qr">
+              <img id="qrImg" alt="QR Zalo OA" />
+            </div>
+            <div class="ctaText">
+              <div id="ctaLine1" class="ctaLine1">Quét QR để nhận tư vấn & báo giá nhanh</div>
+              <div class="ctaMark"></div>
+              <div class="ctaLine2">
+                <span><b id="zaloLabel">Zalo OA</b></span><span class="dot">•</span>
+                <span><b id="hotline">09xx xxx xxx</b></span><span class="dot">•</span>
+                <span><b id="website">newhomes.vn</b></span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const pageEl = $("page");
+    const heroEl = $("hero");
+    const logoImg = $("logoImg");
+    const qrImg = $("qrImg");
+
+    // State for hero positioning
+    let heroPosX = 50;
+    let heroPosY = 45;
+
+    // Default QR placeholder (inline SVG)
+    const defaultQrSvg = encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320">
+        <rect width="320" height="320" fill="#fff"/>
+        <g fill="#2C2826">
+          <rect x="18" y="18" width="90" height="90"/>
+          <rect x="30" y="30" width="66" height="66" fill="#fff"/>
+          <rect x="44" y="44" width="38" height="38"/>
+          <rect x="212" y="18" width="90" height="90"/>
+          <rect x="224" y="30" width="66" height="66" fill="#fff"/>
+          <rect x="238" y="44" width="38" height="38"/>
+          <rect x="18" y="212" width="90" height="90"/>
+          <rect x="30" y="224" width="66" height="66" fill="#fff"/>
+          <rect x="44" y="238" width="38" height="38"/>
+          <rect x="136" y="136" width="16" height="16"/>
+          <rect x="160" y="136" width="16" height="16"/>
+          <rect x="184" y="136" width="16" height="16"/>
+          <rect x="136" y="160" width="16" height="16"/>
+          <rect x="184" y="160" width="16" height="16"/>
+          <rect x="136" y="184" width="16" height="16"/>
+          <rect x="160" y="184" width="16" height="16"/>
+          <rect x="184" y="184" width="16" height="16"/>
+        </g>
+      </svg>
+    `);
+    qrImg.src = "data:image/svg+xml;charset=utf-8," + defaultQrSvg;
+
+    function readFileToDataURL(file, cb){
+      const r = new FileReader();
+      r.onload = () => cb(String(r.result || ""));
+      r.onerror = () => alert("Không đọc được file. Hãy thử file khác.");
+      r.readAsDataURL(file);
+    }
+
+    function applyHero(){
+      heroEl.style.backgroundSize = "cover";
+      heroEl.style.backgroundPosition = `${heroPosX}% ${heroPosY}%`;
+      $("posXRange").value = String(Math.round(heroPosX));
+      $("posYRange").value = String(Math.round(heroPosY));
+    }
+
+    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+    function applyOverlay(){
+      const strength = Number($("overlayRange").value || 62) / 100;
+      const topA = Math.min(0.78, strength + 0.10);
+      const botA = Math.min(0.70, strength + 0.06);
+      const topMid = Math.max(0.14, topA - 0.44);
+      const botMid = Math.max(0.14, botA - 0.38);
+
+      const id = "dynOverlayStyle";
+      let st = document.getElementById(id);
+      if(!st){
+        st = document.createElement("style");
+        st.id = id;
+        document.head.appendChild(st);
+      }
+      st.textContent = `
+        .hero::before{
+          background:
+            radial-gradient(120% 85% at 18% 16%,
+              rgba(61,54,53,${topA.toFixed(2)}) 0%,
+              rgba(61,54,53,${topMid.toFixed(2)}) 55%,
+              rgba(61,54,53,0) 74%
+            ),
+            radial-gradient(120% 70% at 22% 92%,
+              rgba(61,54,53,${botA.toFixed(2)}) 0%,
+              rgba(61,54,53,${botMid.toFixed(2)}) 52%,
+              rgba(61,54,53,0) 78%
+            ),
+            linear-gradient(
+              180deg,
+              rgba(61,54,53,${(strength*0.62).toFixed(2)}) 0%,
+              rgba(61,54,53,${(strength*0.18).toFixed(2)}) 36%,
+              rgba(61,54,53,${(strength*0.14).toFixed(2)}) 58%,
+              rgba(61,54,53,${(strength*0.24).toFixed(2)}) 78%,
+              rgba(61,54,53,${(strength*0.34).toFixed(2)}) 100%
+            );
+        }
+      `;
+    }
+
+    function bindText(inputId, targetId, transform){
+      $(inputId).addEventListener("input", (e) => {
+        const v = e.target.value ?? "";
+        const out = transform ? transform(v) : v;
+        $(targetId).textContent = out;
+      });
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, (c) => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        "\"":"&quot;",
+        "'":"&#39;"
+      }[c]));
+    }
+
+    // Title (2 lines separated by |)
+    $("titleInput").addEventListener("input", (e) => {
+      const raw = String(e.target.value || "");
+      const parts = raw.split("|").map(s => s.trim()).filter(Boolean);
+      const line1 = parts[0] || "NEWHOMES";
+      const line2 = parts[1] || "INTERIOR";
+      $("title").innerHTML = `${escapeHtml(line1)}<br>${escapeHtml(line2)}`;
+    });
+
+    bindText("kickerInput", "kicker");
+    bindText("brandNameInput", "brandName");
+    bindText("brandTagInput", "brandTag");
+    bindText("editionInput", "editionText", v => String(v).toUpperCase());
+    $("subtitleInput").addEventListener("input", (e) => $("subtitle").textContent = String(e.target.value || ""));
+
+    bindText("cta1Input", "ctaLine1");
+    bindText("zaloLabelInput", "zaloLabel");
+    bindText("hotlineInput", "hotline");
+    bindText("websiteInput", "website");
+
+    // Upload hero / logo / QR
+    $("heroFile").addEventListener("change", (e) => {
+      const f = e.target.files && e.target.files[0];
+      if(!f) return;
+      readFileToDataURL(f, (src) => {
+        heroEl.style.backgroundImage = `url("${src}")`;
+        applyHero();
+      });
+    });
+
+    $("logoFile").addEventListener("change", (e) => {
+      const f = e.target.files && e.target.files[0];
+      if(!f) return;
+      readFileToDataURL(f, (src) => {
+        logoImg.src = src;
+        logoImg.classList.remove("is-empty");
+      });
+    });
+
+    $("qrFile").addEventListener("change", (e) => {
+      const f = e.target.files && e.target.files[0];
+      if(!f) return;
+      readFileToDataURL(f, (src) => {
+        qrImg.src = src;
+      });
+    });
+
+    // Sliders for hero position
+    $("posXRange").addEventListener("input", (e) => {
+      heroPosX = clamp(Number(e.target.value || 50), 0, 100);
+      applyHero();
+    });
+    $("posYRange").addEventListener("input", (e) => {
+      heroPosY = clamp(Number(e.target.value || 45), 0, 100);
+      applyHero();
+    });
+
+    // Overlay
+    $("overlayRange").addEventListener("input", applyOverlay);
+
+    // Export / Reset
+    $("exportBtn").addEventListener("click", () => window.print());
+
+    $("resetBtn").addEventListener("click", () => {
+      $("heroFile").value = "";
+      $("logoFile").value = "";
+      $("qrFile").value = "";
+
+      heroEl.style.backgroundImage =
+        'url("https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=2200&q=80")';
+
+      heroPosX = 50;
+      heroPosY = 45;
+      $("overlayRange").value = "62";
+      applyHero();
+      applyOverlay();
+
+      logoImg.removeAttribute("src");
+      logoImg.classList.add("is-empty");
+
+      $("editionInput").value = "2026 EDITION";
+      $("kickerInput").value = "SALE KIT";
+      $("brandNameInput").value = "NEWHOMES";
+      $("brandTagInput").value = "Interior Design • Build • Production";
+      $("titleInput").value = "NEWHOMES|INTERIOR";
+      $("subtitleInput").value = "Thiết kế • Thi công • Sản xuất nội thất trọn gói cho căn hộ và nhà ở. Tối ưu công năng, vật liệu chuẩn, tiến độ rõ ràng.";
+      $("cta1Input").value = "Quét QR để nhận tư vấn & báo giá nhanh";
+      $("hotlineInput").value = "09xx xxx xxx";
+      $("websiteInput").value = "newhomes.vn";
+      $("zaloLabelInput").value = "Zalo OA";
+
+      $("editionText").textContent = "2026 EDITION";
+      $("kicker").textContent = "SALE KIT";
+      $("brandName").textContent = "NEWHOMES";
+      $("brandTag").textContent = "Interior Design • Build • Production";
+      $("title").innerHTML = "NEWHOMES<br>INTERIOR";
+      $("subtitle").textContent = $("subtitleInput").value;
+      $("ctaLine1").textContent = $("cta1Input").value;
+      $("hotline").textContent = $("hotlineInput").value;
+      $("website").textContent = $("websiteInput").value;
+      $("zaloLabel").textContent = $("zaloLabelInput").value;
+
+      qrImg.src = "data:image/svg+xml;charset=utf-8," + defaultQrSvg;
+    });
+
+    // Drag to reposition hero (maps pointer move to background-position)
+    (function enableDragHero(){
+      let dragging = false;
+      let startX = 0, startY = 0;
+      let startPosX = heroPosX, startPosY = heroPosY;
+
+      function onDown(ev){
+        // Only drag when clicking on the page (not the dashboard)
+        dragging = true;
+        pageEl.classList.add("dragging");
+        const p = getPoint(ev);
+        startX = p.x; startY = p.y;
+        startPosX = heroPosX; startPosY = heroPosY;
+        ev.preventDefault();
+      }
+      function onMove(ev){
+        if(!dragging) return;
+        const p = getPoint(ev);
+        const rect = pageEl.getBoundingClientRect();
+        const dx = (p.x - startX) / rect.width;   // -..+
+        const dy = (p.y - startY) / rect.height;
+
+        // Invert so dragging right moves image focus right naturally
+        heroPosX = clamp(startPosX + dx * 60, 0, 100);
+        heroPosY = clamp(startPosY + dy * 60, 0, 100);
+        applyHero();
+        ev.preventDefault();
+      }
+      function onUp(){
+        dragging = false;
+        pageEl.classList.remove("dragging");
+      }
+      function getPoint(ev){
+        if(ev.touches && ev.touches[0]) return { x: ev.touches[0].clientX, y: ev.touches[0].clientY };
+        return { x: ev.clientX, y: ev.clientY };
+      }
+
+      pageEl.addEventListener("mousedown", onDown);
+      window.addEventListener("mousemove", onMove);
+      window.addEventListener("mouseup", onUp);
+
+      pageEl.addEventListener("touchstart", onDown, { passive:false });
+      window.addEventListener("touchmove", onMove, { passive:false });
+      window.addEventListener("touchend", onUp);
+    })();
+
+    // Init
+    heroPosX = Number($("posXRange").value || 50);
+    heroPosY = Number($("posYRange").value || 45);
+    applyHero();
+    applyOverlay();
+  </script>
+</body>
+</html>
