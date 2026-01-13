@@ -1,0 +1,770 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NewHomes — Lời giới thiệu (Editable A4)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --silhouette:#3D3635;
+      --charcoal:#5C534E;
+      --khaki:#B8A88A;
+      --cloud:#F5F5F0;
+      --espresso:#2C2826;
+      --linen:#D6CFC4;
+
+      --ui-bg:#0f0f12;
+      --ui-panel:rgba(255,255,255,.06);
+      --ui-border:rgba(255,255,255,.10);
+
+      --shadow:0 18px 50px rgba(44,40,38,.10);
+      --radius:16px;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      font-family:"Montserrat",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--ui-bg);
+      color:var(--espresso);
+    }
+
+    .app{
+      min-height:100vh;
+      display:grid;
+      grid-template-columns:380px 1fr;
+      gap:18px;
+      padding:18px;
+    }
+    .panel{
+      background:var(--ui-panel);
+      border:1px solid var(--ui-border);
+      border-radius:var(--radius);
+      padding:16px;
+      color:rgba(255,255,255,.92);
+      box-shadow:0 18px 45px rgba(0,0,0,.25);
+    }
+    .panel h2{
+      margin:0 0 12px;
+      font-size:14px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:700;
+    }
+    .group{
+      margin-top:14px;
+      padding-top:14px;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+    .row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    label{
+      display:block;
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.70);
+      margin-bottom:6px;
+      font-weight:700;
+    }
+    input[type="text"], textarea{
+      width:100%;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.92);
+      border-radius:12px;
+      padding:10px 11px;
+      outline:none;
+      font-size:13px;
+    }
+    textarea{ min-height:120px; resize:vertical; line-height:1.35; }
+    input[type="file"]{
+      width:100%;
+      border:1px dashed rgba(255,255,255,.20);
+      background:rgba(255,255,255,.04);
+      color:rgba(255,255,255,.82);
+      border-radius:12px;
+      padding:10px;
+      outline:none;
+      font-size:12px;
+    }
+    input[type="range"]{ width:100%; }
+    .hint{
+      margin-top:8px;
+      font-size:12px;
+      line-height:1.35;
+      color:rgba(255,255,255,.70);
+    }
+    .btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+    button{
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.08);
+      color:rgba(255,255,255,.92);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:12px;
+    }
+    button.primary{
+      background:rgba(184,168,138,.25);
+      border-color:rgba(184,168,138,.35);
+    }
+
+    .stage{
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:4px 0 30px;
+      overflow:auto;
+    }
+
+    /* ===== A4 page ===== */
+    .page{
+      width:210mm;
+      height:297mm;
+      background:var(--cloud);
+      box-shadow:var(--shadow);
+      border-radius:0;
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* Right photo strip: widened slightly for breathing */
+    .photoStrip{
+      position:absolute;
+      top:0; right:0; bottom:0;
+      width:78mm; /* was 74mm */
+      overflow:hidden;
+      pointer-events:none;
+    }
+    .photoStrip img{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:140%;
+      height:140%;
+      transform:translate(-50%,-50%) scale(1);
+      object-fit:cover;
+      filter:saturate(.95) contrast(.95);
+      opacity:.92;
+    }
+    /* Smoother blend into content zone */
+    .photoStrip::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(90deg,
+          rgba(245,245,240,1) 0%,
+          rgba(245,245,240,.92) 20%,
+          rgba(245,245,240,.62) 46%,
+          rgba(245,245,240,.22) 72%,
+          rgba(245,245,240,0) 100%
+        );
+      pointer-events:none;
+    }
+
+    .pageWash{
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(120% 70% at 14% 10%, rgba(184,168,138,.10) 0%, rgba(184,168,138,0) 56%),
+        radial-gradient(120% 70% at 12% 92%, rgba(214,207,196,.28) 0%, rgba(214,207,196,0) 62%);
+      pointer-events:none;
+      opacity:.9;
+    }
+
+    /* Safe area 15mm (kept) */
+    .safe{
+      position:absolute;
+      inset:15mm;
+      display:flex;
+      flex-direction:column;
+      z-index:2;
+    }
+
+    /* ===== Header / Footer ===== */
+    .header{
+      display:grid;
+      grid-template-columns:1fr auto 1fr;
+      align-items:end;
+      gap:10mm;
+      padding-bottom:4mm;
+      border-bottom:0.6pt solid var(--linen);
+      position:relative;
+    }
+    .header::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:-0.9pt;
+      width:22mm;
+      height:2.2pt;
+      background:rgba(184,168,138,.92);
+      opacity:.9;
+    }
+    .h-left{
+      font-size:9pt;
+      font-weight:700;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--silhouette);
+    }
+    .h-center{
+      font-size:8.5pt;
+      font-weight:600;
+      letter-spacing:.10em;
+      color:rgba(92,83,78,.88);
+      white-space:nowrap;
+    }
+    .h-right{
+      justify-self:end;
+      display:flex;
+      gap:2.2mm;
+      align-items:baseline;
+      font-size:9pt;
+      font-weight:700;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--silhouette);
+      white-space:nowrap;
+    }
+    .h-right .sep{ opacity:.55; }
+
+    .footer{
+      margin-top:auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding-top:4mm;
+      border-top:0.6pt solid var(--linen);
+      color:rgba(92,83,78,.88);
+      font-size:8.5pt;
+      letter-spacing:.08em;
+    }
+
+    /* ===== Content (looser rhythm) ===== */
+    .content{
+      padding-top:12mm;          /* was 10mm */
+      padding-right:4mm;         /* NEW: air from photo strip */
+      display:grid;
+      grid-template-columns:1fr;
+      gap:9.5mm;                 /* was 7mm */
+      max-width:114mm;           /* was 120mm */
+    }
+
+    .title{
+      font-size:25pt;            /* slightly down for whitespace */
+      font-weight:700;
+      letter-spacing:-0.01em;
+      color:var(--espresso);
+      line-height:1.03;
+      text-transform:uppercase;
+    }
+    .subtitle{
+      font-size:10.8pt;          /* slightly down */
+      font-weight:500;
+      color:var(--charcoal);
+      line-height:1.6;
+      max-width:112mm;
+    }
+    .accentRule{
+      width:42mm;
+      height:3pt;
+      background:var(--khaki);
+      opacity:.92;
+      margin-top:2.5mm;          /* a bit more breathing */
+    }
+
+    .body{
+      font-size:10.8pt;          /* was 11pt */
+      font-weight:500;
+      color:var(--espresso);
+      line-height:1.66;
+    }
+
+    .quote{
+      margin-top:1mm;
+      padding-left:6mm;          /* was 5mm */
+      border-left:2.2pt solid rgba(184,168,138,.92);
+      color:rgba(44,40,38,.92);
+      font-weight:600;
+      line-height:1.6;
+    }
+    .quote small{
+      display:block;
+      margin-top:2.5mm;
+      font-weight:600;
+      color:rgba(92,83,78,.85);
+      letter-spacing:.02em;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:7mm;                   /* was 6mm */
+      padding-top:3mm;           /* was 2mm */
+    }
+    .stat{
+      padding-top:3mm;           /* was 2mm */
+      border-top:0.6pt solid rgba(214,207,196,.95);
+    }
+    .stat .value{
+      font-size:15pt;            /* was 16pt */
+      font-weight:700;
+      letter-spacing:-0.01em;
+      color:var(--silhouette);
+      line-height:1.08;
+    }
+    .stat .label{
+      margin-top:1.8mm;
+      font-size:8.8pt;           /* was 9pt */
+      font-weight:700;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:rgba(92,83,78,.88);
+      line-height:1.25;
+    }
+
+    .bullets{
+      display:grid;
+      gap:4.0mm;                 /* was 3.2mm (looser) */
+      margin-top:1mm;
+    }
+    .bullet{
+      display:flex;
+      gap:3mm;
+      align-items:flex-start;
+      color:rgba(44,40,38,.92);
+    }
+    .icon{
+      width:10px;
+      height:10px;
+      border:1px solid rgba(92,83,78,.60);
+      border-radius:999px;
+      margin-top:4px;
+      position:relative;
+      flex:0 0 auto;
+    }
+    .icon::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:4px;
+      height:4px;
+      transform:translate(-50%,-50%);
+      background:var(--khaki);
+      border-radius:999px;
+      opacity:.9;
+    }
+    .bullet .text{
+      font-size:10.3pt;          /* was 10.6pt */
+      font-weight:500;
+      line-height:1.52;          /* slightly roomier */
+      color:rgba(44,40,38,.92);
+    }
+
+    .sig{
+      margin-top:1mm;
+      display:flex;
+      flex-direction:column;
+      gap:1mm;
+      color:rgba(92,83,78,.92);
+    }
+    .sig .name{
+      font-size:10.4pt;
+      font-weight:700;
+      color:var(--espresso);
+      letter-spacing:.02em;
+    }
+    .sig .role{
+      font-size:9.0pt;
+      font-weight:600;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      color:rgba(92,83,78,.85);
+    }
+
+    /* Sticker CTA-1: lifted a bit (avoid cramped bottom) */
+    .sticker{
+      position:absolute;
+      right:0;
+      bottom:16mm;               /* was 10mm */
+      width:62mm;
+      padding:4mm 4mm 4.2mm;
+      border:0.8pt solid rgba(214,207,196,.95);
+      background:rgba(245,245,240,.52);
+      backdrop-filter:blur(3px);
+      -webkit-backdrop-filter:blur(3px);
+    }
+    .sticker .t1{
+      font-size:9pt;
+      font-weight:700;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--silhouette);
+      line-height:1.1;
+    }
+    .sticker .t2{
+      margin-top:1.8mm;
+      font-size:9.2pt;
+      font-weight:500;
+      color:rgba(92,83,78,.90);
+      line-height:1.25;
+    }
+    .sticker .box{
+      margin-top:3mm;
+      height:16mm;
+      border:1px dashed rgba(92,83,78,.45);
+      background:rgba(245,245,240,.50);
+    }
+
+    [contenteditable="true"]{ outline:none; border-radius:6px; }
+    [contenteditable="true"]:focus{
+      box-shadow:0 0 0 2px rgba(184,168,138,.28);
+      background:rgba(184,168,138,.10);
+    }
+
+    /* ===== Print ===== */
+    @page { size:A4; margin:0; }
+    @media print{
+      html, body{
+        width:210mm !important;
+        height:297mm !important;
+        margin:0 !important;
+        padding:0 !important;
+        background:#fff !important;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact;
+      }
+      .panel{ display:none !important; }
+      .app{ display:block !important; padding:0 !important; margin:0 !important; background:#fff !important; }
+      .stage{ padding:0 !important; margin:0 !important; background:#fff !important; overflow:visible !important; }
+      .page{
+        position:fixed !important;
+        left:0 !important; top:0 !important;
+        width:210mm !important; height:297mm !important;
+        margin:0 !important;
+        box-shadow:none !important;
+      }
+    }
+
+    @media (max-width:1100px){
+      .app{ grid-template-columns:1fr; }
+      .panel{ order:2; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <aside class="panel">
+      <h2>Intro Editor</h2>
+
+      <div class="group">
+        <div class="row">
+          <div>
+            <label>Header trái</label>
+            <input id="inHeaderLeft" type="text" value="LỜI GIỚI THIỆU">
+          </div>
+          <div>
+            <label>Header giữa</label>
+            <input id="inHeaderCenter" type="text" value="NEWHOMES • 2026">
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>Section code</label>
+            <input id="inSectionCode" type="text" value="01">
+          </div>
+          <div>
+            <label>Page number</label>
+            <input id="inPageNum" type="text" value="02">
+          </div>
+        </div>
+
+        <div class="btns">
+          <button class="primary" id="btnPrint">Export PDF (A4)</button>
+          <button id="btnReset">Reset</button>
+        </div>
+
+        <div class="hint">Click trực tiếp vào chữ trên trang để sửa nhanh.</div>
+      </div>
+
+      <div class="group">
+        <label>Title</label>
+        <input id="inTitle" type="text" value="LỜI GIỚI THIỆU">
+
+        <div style="margin-top:10px;">
+          <label>Subtitle</label>
+          <textarea id="inSubtitle">NewHomes cung cấp giải pháp thiết kế – thi công – sản xuất nội thất trọn gói, tập trung tối ưu công năng, vật liệu chuẩn và tiến độ rõ ràng.</textarea>
+        </div>
+
+        <div style="margin-top:10px;">
+          <label>Body</label>
+          <textarea id="inBody">Chúng tôi tin rằng một không gian đẹp phải bắt đầu từ công năng đúng, vật liệu đúng và quy trình rõ ràng. Với đội ngũ thiết kế am hiểu thực tế thi công và hệ thống sản xuất chủ động, NewHomes giúp khách hàng kiểm soát chất lượng ngay từ bản vẽ đến từng chi tiết hoàn thiện.</textarea>
+        </div>
+
+        <div style="margin-top:10px;">
+          <label>Quote</label>
+          <textarea id="inQuote">“Thiết kế đẹp là thiết kế vận hành tốt – tối ưu lưu trữ, ánh sáng và trải nghiệm sống.”</textarea>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>Signature Name</label>
+            <input id="inSigName" type="text" value="NewHomes Interior">
+          </div>
+          <div>
+            <label>Signature Role</label>
+            <input id="inSigRole" type="text" value="DESIGN • BUILD • PRODUCTION">
+          </div>
+        </div>
+      </div>
+
+      <div class="group">
+        <label>Ảnh dải bên phải (Upload)</label>
+        <input id="imgFile" type="file" accept="image/*">
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>Opacity</label>
+            <input id="imgOpacity" type="range" min="40" max="100" value="92">
+          </div>
+          <div>
+            <label>Scale</label>
+            <input id="imgScale" type="range" min="110" max="220" value="140">
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>Pos X</label>
+            <input id="imgX" type="range" min="0" max="100" value="50">
+          </div>
+          <div>
+            <label>Pos Y</label>
+            <input id="imgY" type="range" min="0" max="100" value="50">
+          </div>
+        </div>
+      </div>
+
+      <div class="group">
+        <label>Stats (3 ô)</label>
+        <div class="row">
+          <div><label>Value 1</label><input id="s1v" type="text" value="200+"></div>
+          <div><label>Label 1</label><input id="s1l" type="text" value="DỰ ÁN HOÀN THIỆN"></div>
+        </div>
+        <div class="row" style="margin-top:10px;">
+          <div><label>Value 2</label><input id="s2v" type="text" value="Xưởng chủ động"></div>
+          <div><label>Label 2</label><input id="s2l" type="text" value="SẢN XUẤT & QC"></div>
+        </div>
+        <div class="row" style="margin-top:10px;">
+          <div><label>Value 3</label><input id="s3v" type="text" value="Cam kết tiến độ"></div>
+          <div><label>Label 3</label><input id="s3l" type="text" value="QUY TRÌNH RÕ RÀNG"></div>
+        </div>
+      </div>
+
+      <div class="group">
+        <label>Bullets (mỗi dòng 1 ý)</label>
+        <textarea id="inBullets">Thiết kế bám sát ngân sách, tối ưu công năng theo thói quen sử dụng
+Vật liệu & phụ kiện rõ nguồn gốc, đề xuất theo độ bền và thẩm mỹ
+Thi công chuẩn kỹ thuật, nghiệm thu theo checklist minh bạch</textarea>
+      </div>
+
+      <div class="group">
+        <label>Sticker CTA-1 (dòng 1 / dòng 2)</label>
+        <div class="row">
+          <div><input id="cta1" type="text" value="LIÊN HỆ TƯ VẤN"></div>
+          <div><input id="cta2" type="text" value="Dán sticker thông tin sales tại đây"></div>
+        </div>
+      </div>
+
+      <div class="group">
+        <label>Footer trái</label>
+        <input id="inFooterLeft" type="text" value="NEWHOMES • 2026">
+      </div>
+    </aside>
+
+    <main class="stage">
+      <section class="page" aria-label="A4 Intro">
+        <div class="photoStrip" aria-hidden="true">
+          <img id="stripImg"
+               src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=2200&q=80"
+               alt="">
+        </div>
+        <div class="pageWash" aria-hidden="true"></div>
+
+        <div class="safe">
+          <div class="header">
+            <div id="hLeft" class="h-left" contenteditable="true">LỜI GIỚI THIỆU</div>
+            <div id="hCenter" class="h-center" contenteditable="true">NEWHOMES • 2026</div>
+            <div class="h-right">
+              <span id="hSection" contenteditable="true">01</span>
+              <span class="sep">•</span>
+              <span id="hPage" contenteditable="true">02</span>
+            </div>
+          </div>
+
+          <div class="content">
+            <div>
+              <div id="title" class="title" contenteditable="true">LỜI GIỚI THIỆU</div>
+              <div class="accentRule" aria-hidden="true"></div>
+            </div>
+
+            <div id="subtitle" class="subtitle" contenteditable="true">
+              NewHomes cung cấp giải pháp thiết kế – thi công – sản xuất nội thất trọn gói, tập trung tối ưu công năng, vật liệu chuẩn và tiến độ rõ ràng.
+            </div>
+
+            <div id="body" class="body" contenteditable="true">
+              Chúng tôi tin rằng một không gian đẹp phải bắt đầu từ công năng đúng, vật liệu đúng và quy trình rõ ràng. Với đội ngũ thiết kế am hiểu thực tế thi công và hệ thống sản xuất chủ động, NewHomes giúp khách hàng kiểm soát chất lượng ngay từ bản vẽ đến từng chi tiết hoàn thiện.
+            </div>
+
+            <div id="quote" class="quote" contenteditable="true">
+              “Thiết kế đẹp là thiết kế vận hành tốt – tối ưu lưu trữ, ánh sáng và trải nghiệm sống.”
+              <small id="quoteBy" contenteditable="true">— Cam kết chất lượng NewHomes</small>
+            </div>
+
+            <div class="stats" aria-label="Stats">
+              <div class="stat">
+                <div id="stat1v" class="value" contenteditable="true">200+</div>
+                <div id="stat1l" class="label" contenteditable="true">DỰ ÁN HOÀN THIỆN</div>
+              </div>
+              <div class="stat">
+                <div id="stat2v" class="value" contenteditable="true">Xưởng chủ động</div>
+                <div id="stat2l" class="label" contenteditable="true">SẢN XUẤT & QC</div>
+              </div>
+              <div class="stat">
+                <div id="stat3v" class="value" contenteditable="true">Cam kết tiến độ</div>
+                <div id="stat3l" class="label" contenteditable="true">QUY TRÌNH RÕ RÀNG</div>
+              </div>
+            </div>
+
+            <div id="bullets" class="bullets" aria-label="Bullets"></div>
+
+            <div class="sig" aria-label="Signature">
+              <div id="sigName" class="name" contenteditable="true">NewHomes Interior</div>
+              <div id="sigRole" class="role" contenteditable="true">DESIGN • BUILD • PRODUCTION</div>
+            </div>
+          </div>
+
+          <div class="sticker" aria-label="Sticker CTA">
+            <div id="ctaT1" class="t1" contenteditable="true">LIÊN HỆ TƯ VẤN</div>
+            <div id="ctaT2" class="t2" contenteditable="true">Dán sticker thông tin sales tại đây</div>
+            <div class="box" aria-hidden="true"></div>
+          </div>
+
+          <div class="footer">
+            <div id="fLeft" contenteditable="true">NEWHOMES • 2026</div>
+            <div id="fRight" contenteditable="true">02</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    function readFileToDataURL(file, cb){
+      const r = new FileReader();
+      r.onload = () => cb(String(r.result || ""));
+      r.onerror = () => alert("Không đọc được file. Hãy thử file khác.");
+      r.readAsDataURL(file);
+    }
+
+    function bindMirror(inputId, targetId, transform){
+      $(inputId).addEventListener("input", (e) => {
+        const v = e.target.value ?? "";
+        $(targetId).textContent = transform ? transform(v) : v;
+      });
+    }
+
+    function renderBullets(){
+      const lines = String($("inBullets").value || "")
+        .split("\n").map(s => s.trim()).filter(Boolean);
+
+      const wrap = $("bullets");
+      wrap.innerHTML = "";
+      lines.slice(0, 6).forEach(t => {
+        const row = document.createElement("div");
+        row.className = "bullet";
+        row.innerHTML = `<div class="icon" aria-hidden="true"></div><div class="text" contenteditable="true">${t}</div>`;
+        wrap.appendChild(row);
+      });
+    }
+
+    function applyImage(){
+      const op = Number($("imgOpacity").value || 92) / 100;
+      const scale = Number($("imgScale").value || 140) / 100;
+      const x = Number($("imgX").value || 50);
+      const y = Number($("imgY").value || 50);
+
+      const img = $("stripImg");
+      img.style.opacity = String(op);
+      img.style.left = x + "%";
+      img.style.top = y + "%";
+      img.style.width = (scale * 100) + "%";
+      img.style.height = (scale * 100) + "%";
+      img.style.transform = "translate(-50%,-50%)";
+    }
+
+    bindMirror("inHeaderLeft", "hLeft", v => String(v).toUpperCase());
+    bindMirror("inHeaderCenter", "hCenter");
+    bindMirror("inSectionCode", "hSection", v => String(v).toUpperCase());
+    bindMirror("inPageNum", "hPage", v => String(v).toUpperCase());
+    bindMirror("inTitle", "title", v => String(v).toUpperCase());
+
+    $("inSubtitle").addEventListener("input", (e) => $("subtitle").textContent = String(e.target.value || ""));
+    $("inBody").addEventListener("input", (e) => $("body").textContent = String(e.target.value || ""));
+    $("inQuote").addEventListener("input", (e) => $("quote").childNodes[0].nodeValue = String(e.target.value || ""));
+
+    bindMirror("inSigName", "sigName");
+    bindMirror("inSigRole", "sigRole", v => String(v).toUpperCase());
+    bindMirror("inFooterLeft", "fLeft");
+    $("inPageNum").addEventListener("input", (e) => $("fRight").textContent = String(e.target.value || "").toUpperCase());
+
+    bindMirror("s1v", "stat1v");
+    bindMirror("s1l", "stat1l", v => String(v).toUpperCase());
+    bindMirror("s2v", "stat2v");
+    bindMirror("s2l", "stat2l", v => String(v).toUpperCase());
+    bindMirror("s3v", "stat3v");
+    bindMirror("s3l", "stat3l", v => String(v).toUpperCase());
+
+    bindMirror("cta1", "ctaT1", v => String(v).toUpperCase());
+    bindMirror("cta2", "ctaT2");
+
+    $("imgFile").addEventListener("change", (e) => {
+      const f = e.target.files && e.target.files[0];
+      if(!f) return;
+      readFileToDataURL(f, (src) => { $("stripImg").src = src; });
+    });
+    ["imgOpacity","imgScale","imgX","imgY"].forEach(id => $(id).addEventListener("input", applyImage));
+
+    $("inBullets").addEventListener("input", renderBullets);
+
+    $("btnPrint").addEventListener("click", () => window.print());
+
+    $("btnReset").addEventListener("click", () => location.reload());
+
+    renderBullets();
+    applyImage();
+    $("fRight").textContent = $("inPageNum").value.toUpperCase();
+  </script>
+</body>
+</html>
