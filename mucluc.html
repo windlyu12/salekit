@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NewHomes — Mục lục (Editable A4 + Background Image)</title>
+
+  <!-- Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Espresso & Khaki Luxe (2026) */
+      --silhouette: #3D3635;
+      --charcoal: #5C534E;
+      --khaki: #B8A88A;
+      --cloud: #F5F5F0;
+      --espresso: #2C2826;
+      --linen: #D6CFC4;
+
+      --ui-bg: #0f0f12;
+      --ui-panel: rgba(255,255,255,.06);
+      --ui-border: rgba(255,255,255,.10);
+
+      --shadow: 0 18px 50px rgba(44,40,38,.10);
+      --radius: 16px;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--ui-bg);
+      color: var(--espresso);
+    }
+
+    /* ===== App layout ===== */
+    .app{
+      min-height:100vh;
+      display:grid;
+      grid-template-columns: 380px 1fr;
+      gap: 18px;
+      padding: 18px;
+    }
+
+    .panel{
+      background: var(--ui-panel);
+      border: 1px solid var(--ui-border);
+      border-radius: var(--radius);
+      padding: 16px;
+      color: rgba(255,255,255,.92);
+      box-shadow: 0 18px 45px rgba(0,0,0,.25);
+    }
+    .panel h2{
+      margin: 0 0 12px;
+      font-size: 14px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .group{
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    label{
+      display:block;
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.70);
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+    input[type="text"], textarea{
+      width:100%;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.92);
+      border-radius: 12px;
+      padding: 10px 11px;
+      outline: none;
+      font-size: 13px;
+    }
+    textarea{ min-height: 210px; resize: vertical; line-height: 1.35; }
+    input[type="file"]{
+      width:100%;
+      border: 1px dashed rgba(255,255,255,.20);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.82);
+      border-radius: 12px;
+      padding: 10px;
+      outline:none;
+      font-size: 12px;
+    }
+    input[type="range"]{ width:100%; }
+    .hint{
+      margin-top: 8px;
+      font-size: 12px;
+      line-height: 1.35;
+      color: rgba(255,255,255,.70);
+    }
+    .btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
+    button{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+      color: rgba(255,255,255,.92);
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+    button.primary{
+      background: rgba(184,168,138,.25);
+      border-color: rgba(184,168,138,.35);
+    }
+
+    .stage{
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding: 4px 0 30px;
+      overflow:auto;
+    }
+
+    /* ===== A4 page ===== */
+    .page{
+      width: 210mm;
+      height: 297mm;
+      background: var(--cloud);
+      box-shadow: var(--shadow);
+      border-radius: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Background image layer: use <img> so it prints even when BG graphics is off */
+    .bgLayer{
+      position:absolute;
+      inset:0;
+      overflow:hidden;
+      pointer-events:none;
+    }
+    .bgImg{
+      position:absolute;
+      left: 50%;
+      top: 50%;
+      width: 120%;
+      height: 120%;
+      transform: translate(-50%,-50%) scale(1);
+      object-fit: cover;
+      filter: saturate(.95) contrast(.95);
+      opacity: .16; /* default */
+    }
+    /* Soft wash to keep readability (not a "card") */
+    .bgWash{
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(120% 65% at 10% 20%, rgba(245,245,240,.94) 0%, rgba(245,245,240,.72) 55%, rgba(245,245,240,.62) 100%),
+        linear-gradient(180deg, rgba(245,245,240,.88) 0%, rgba(245,245,240,.76) 35%, rgba(245,245,240,.72) 100%);
+      pointer-events:none;
+      opacity: .1;
+    }
+
+    /* Safe area 15mm */
+    .safe{
+      position:absolute;
+      inset: 15mm;
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* ===== Header / Footer ===== */
+    .header{
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: end;
+      gap: 10mm;
+      padding-bottom: 4mm;
+      border-bottom: 0.6pt solid var(--linen);
+      position: relative;
+    }
+
+    /* Small khaki tick (signature) */
+    .header::after{
+      content:"";
+      position:absolute;
+      left: 0;
+      bottom: -0.9pt;
+      width: 22mm;
+      height: 2.2pt;
+      background: rgba(184,168,138,.92);
+      opacity: .9;
+    }
+
+    .h-left{
+      font-size: 9pt;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--silhouette);
+    }
+    .h-center{
+      font-size: 8.5pt;
+      font-weight: 600;
+      letter-spacing: .10em;
+      color: rgba(92,83,78,.88);
+      white-space: nowrap;
+    }
+    .h-right{
+      justify-self: end;
+      display:flex;
+      gap: 2.2mm;
+      align-items: baseline;
+      font-size: 9pt;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--silhouette);
+      white-space: nowrap;
+    }
+    .h-right .sep{ opacity: .55; }
+
+    .footer{
+      margin-top:auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding-top: 4mm;
+      border-top: 0.6pt solid var(--linen);
+      color: rgba(92,83,78,.88);
+      font-size: 8.5pt;
+      letter-spacing: .08em;
+    }
+
+    /* ===== Title zone ===== */
+    .titleZone{
+      padding-top: 10mm;
+      padding-bottom: 6mm;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 3.5mm;
+      position: relative;
+    }
+
+    /* Subtle watermark number */
+    .watermark{
+      position:absolute;
+      right: -6mm;
+      top: -6mm;
+      font-size: 64pt;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: rgba(214,207,196,.55);
+      user-select:none;
+      pointer-events:none;
+    }
+
+    .tocTitle{
+      font-size: 28pt;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--espresso);
+      line-height: 1.02;
+      text-transform: uppercase;
+    }
+    .tocSub{
+      font-size: 11pt;
+      font-weight: 500;
+      color: var(--charcoal);
+      line-height: 1.45;
+      max-width: 150mm;
+    }
+    .accentRule{
+      width: 45mm;
+      height: 3pt;
+      background: var(--khaki);
+      opacity: .92;
+      margin-top: 1mm;
+    }
+
+    /* ===== TOC list zone ===== */
+    .contentZone{
+      padding-top: 3mm;
+      display:block;
+      max-width: 180mm;
+    }
+
+    .tocGroup{
+      margin-bottom: 5mm;
+    }
+    .gHead{
+      display:flex;
+      align-items:center;
+      gap: 3mm;
+      margin-bottom: 2.8mm;
+    }
+    .gCode{
+      font-size: 8.5pt;
+      font-weight: 700;
+      letter-spacing: .18em;
+      color: var(--silhouette);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .gLine{
+      flex: 1;
+      height: 0.6pt;
+      background: var(--linen);
+      opacity: .92;
+    }
+
+    .item{
+      display:grid;
+      grid-template-columns: 12mm 1fr 1fr 12mm;
+      align-items: baseline;
+      gap: 3mm;
+      padding: 1.8mm 0;
+    }
+    .num{
+      font-size: 10pt;
+      font-weight: 600;
+      color: rgba(92,83,78,.92);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .name{
+      font-size: 11pt;
+      font-weight: 500;
+      color: var(--espresso);
+      line-height: 1.2;
+    }
+    .pageNo{
+      justify-self:end;
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--espresso);
+      letter-spacing: .02em;
+    }
+
+    /* Editorial dotted leader: thin, light, airy */
+    .leader{
+      height: 1em;
+      align-self: center;
+      position: relative;
+      opacity: .95;
+    }
+    .leader::before{
+      content:"";
+      position:absolute;
+      inset: 50% 0 auto 0;
+      height: 1.2pt;
+      transform: translateY(-50%);
+      background:
+        repeating-radial-gradient(circle at 2px 50%,
+          rgba(214,207,196,.95) 0 0.7px,
+          rgba(214,207,196,0) 0.8px 6px
+        );
+    }
+
+    /* Editable text */
+    [contenteditable="true"]{
+      outline: none;
+      border-radius: 6px;
+    }
+    [contenteditable="true"]:focus{
+      box-shadow: 0 0 0 2px rgba(184,168,138,.28);
+      background: rgba(184,168,138,.10);
+    }
+
+    /* ===== Print (no dark blocks) ===== */
+    @page { size: A4; margin: 0; }
+    @media print{
+      html, body{
+        width: 210mm !important;
+        height: 297mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .panel{ display:none !important; }
+      .app{ display:block !important; padding:0 !important; margin:0 !important; background:#fff !important; }
+      .stage{ padding:0 !important; margin:0 !important; background:#fff !important; overflow:visible !important; }
+      .page{
+        position: fixed !important;
+        left: 0 !important; top: 0 !important;
+        width: 210mm !important; height: 297mm !important;
+        margin: 0 !important;
+        box-shadow:none !important;
+      }
+    }
+
+    @media (max-width: 1100px){
+      .app{ grid-template-columns: 1fr; }
+      .panel{ order: 2; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- DASHBOARD -->
+    <aside class="panel">
+      <h2>TOC Editor</h2>
+
+      <div class="group">
+        <div class="row">
+          <div>
+            <label>Header trái</label>
+            <input id="inHeaderLeft" type="text" value="MỤC LỤC">
+          </div>
+          <div>
+            <label>Header giữa</label>
+            <input id="inHeaderCenter" type="text" value="NEWHOMES • 2026">
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>Section code</label>
+            <input id="inSectionCode" type="text" value="01">
+          </div>
+          <div>
+            <label>Page number</label>
+            <input id="inPageNum" type="text" value="01">
+          </div>
+        </div>
+
+        <div class="btns">
+          <button class="primary" id="btnPrint">Export PDF (A4)</button>
+          <button id="btnReset">Reset</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <label>Title</label>
+        <input id="inTitle" type="text" value="MỤC LỤC">
+
+        <div style="margin-top:10px;">
+          <label>Subtitle</label>
+          <input id="inSub" type="text" value="Sale kit tổng quan năng lực & dự án 2026">
+        </div>
+
+        <div style="margin-top:10px;">
+          <label>Watermark (góc phải)</label>
+          <input id="inWatermark" type="text" value="01">
+        </div>
+      </div>
+
+      <div class="group">
+        <label>Ảnh background (Upload)</label>
+        <input id="bgFile" type="file" accept="image/*">
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>Opacity</label>
+            <input id="bgOpacity" type="range" min="0" max="35" value="16">
+          </div>
+          <div>
+            <label>Blur</label>
+            <input id="bgBlur" type="range" min="0" max="10" value="2">
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>Scale</label>
+            <input id="bgScale" type="range" min="100" max="160" value="120">
+          </div>
+          <div>
+            <label>Wash</label>
+            <input id="washOpacity" type="range" min="60" max="98" value="88">
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>Pos X</label>
+            <input id="bgX" type="range" min="0" max="100" value="50">
+          </div>
+          <div>
+            <label>Pos Y</label>
+            <input id="bgY" type="range" min="0" max="100" value="50">
+          </div>
+        </div>
+
+        <div class="hint">
+          Ảnh nền dùng &lt;img&gt; nên export PDF trên mac ổn hơn (không phụ thuộc “Background graphics”).
+        </div>
+      </div>
+
+      <div class="group">
+        <label>Mục lục (format: GROUP|NUM|TITLE|PAGE) — mỗi dòng 1 mục</label>
+        <textarea id="inToc">COMPANY|02|Lời giới thiệu|02
+COMPANY|03|Thông tin pháp lý|03
+COMPANY|04|Dịch vụ|04
+COMPANY|05|Năng lực sản xuất|05
+PROCESS|06|Quy trình thiết kế|06
+PROCESS|07|Quy trình thi công|07
+PROCESS|08|Q&A|08
+DESIGN STYLES|09|Các phong cách thiết kế|09
+DESIGN STYLES|10|Phong cách Hiện đại|10
+DESIGN STYLES|11|Phong cách Tân cổ điển|11
+DESIGN STYLES|12|Phong cách Luxury|12
+PROJECTS|13|Các dự án tiêu biểu|13
+PROJECTS|14|Case Study 1 – Căn hộ 1PN|14
+PROJECTS|15|Case Study 2 – Căn hộ 2PN|15
+PROJECTS|16|Case Study 3 – Căn hộ 3PN|16
+MATERIALS & WARRANTY|17|Vật liệu & đối tác|17
+MATERIALS & WARRANTY|18|Bảo hành & chất lượng|18</textarea>
+      </div>
+
+      <div class="group">
+        <label>Footer trái</label>
+        <input id="inFooterLeft" type="text" value="NEWHOMES • 2026">
+      </div>
+    </aside>
+
+    <!-- PREVIEW -->
+    <main class="stage">
+      <section class="page" aria-label="A4 TOC">
+
+        <!-- Background -->
+        <div class="bgLayer" aria-hidden="true">
+          <img id="bgImg" class="bgImg"
+               src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=2400&q=80"
+               alt="">
+          <div id="bgWash" class="bgWash"></div>
+        </div>
+
+        <div class="safe">
+
+          <!-- Header -->
+          <div class="header">
+            <div id="hLeft" class="h-left" contenteditable="true">MỤC LỤC</div>
+            <div id="hCenter" class="h-center" contenteditable="true">NEWHOMES • 2026</div>
+            <div class="h-right">
+              <span id="hSection" contenteditable="true">01</span>
+              <span class="sep">•</span>
+              <span id="hPage" contenteditable="true">01</span>
+            </div>
+          </div>
+
+          <!-- Title zone -->
+          <div class="titleZone">
+            <div id="wm" class="watermark">01</div>
+            <div id="tocTitle" class="tocTitle" contenteditable="true">MỤC LỤC</div>
+            <div id="tocSub" class="tocSub" contenteditable="true">Sale kit tổng quan năng lực & dự án 2026</div>
+            <div class="accentRule"></div>
+          </div>
+
+          <!-- Content -->
+          <div class="contentZone">
+            <div id="tocList"></div>
+          </div>
+
+          <!-- Footer -->
+          <div class="footer">
+            <div id="fLeft" contenteditable="true">NEWHOMES • 2026</div>
+            <div id="fRight" contenteditable="true">01</div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, (c) => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        "\"":"&quot;",
+        "'":"&#39;"
+      }[c]));
+    }
+
+    function readFileToDataURL(file, cb){
+      const r = new FileReader();
+      r.onload = () => cb(String(r.result || ""));
+      r.onerror = () => alert("Không đọc được file. Hãy thử file khác.");
+      r.readAsDataURL(file);
+    }
+
+    function parseToc(text){
+      const rows = String(text || "").split("\n")
+        .map(l => l.trim())
+        .filter(Boolean)
+        .map(l => l.split("|").map(x => (x || "").trim()));
+
+      // GROUP|NUM|TITLE|PAGE
+      const items = rows
+        .filter(p => p.length >= 3)
+        .map(p => ({
+          group: p[0] || "GROUP",
+          num: p[1] || "",
+          title: p[2] || "",
+          page: p[3] || ""
+        }));
+
+      const groups = new Map();
+      items.forEach(it => {
+        if(!groups.has(it.group)) groups.set(it.group, []);
+        groups.get(it.group).push(it);
+      });
+      return groups;
+    }
+
+    function renderToc(){
+      const groups = parseToc($("inToc").value);
+      const container = $("tocList");
+      container.innerHTML = "";
+
+      for(const [groupName, items] of groups.entries()){
+        const g = document.createElement("div");
+        g.className = "tocGroup";
+
+        const head = document.createElement("div");
+        head.className = "gHead";
+        head.innerHTML = `
+          <div class="gCode" contenteditable="true">${escapeHtml(groupName)}</div>
+          <div class="gLine" aria-hidden="true"></div>
+        `;
+        g.appendChild(head);
+
+        items.forEach(it => {
+          const row = document.createElement("div");
+          row.className = "item";
+          row.innerHTML = `
+            <div class="num" contenteditable="true">${escapeHtml(it.num)}</div>
+            <div class="name" contenteditable="true">${escapeHtml(it.title)}</div>
+            <div class="leader" aria-hidden="true"></div>
+            <div class="pageNo" contenteditable="true">${escapeHtml(it.page)}</div>
+          `;
+          g.appendChild(row);
+        });
+
+        container.appendChild(g);
+      }
+    }
+
+    function bindMirror(inputId, targetId, transform){
+      $(inputId).addEventListener("input", (e) => {
+        const v = e.target.value ?? "";
+        $(targetId).textContent = transform ? transform(v) : v;
+      });
+    }
+
+    // Header / footer / title
+    bindMirror("inHeaderLeft", "hLeft", v => String(v).toUpperCase());
+    bindMirror("inHeaderCenter", "hCenter");
+    bindMirror("inSectionCode", "hSection", v => String(v).toUpperCase());
+    bindMirror("inPageNum", "hPage", v => String(v).toUpperCase());
+    bindMirror("inTitle", "tocTitle", v => String(v).toUpperCase());
+    bindMirror("inSub", "tocSub");
+    bindMirror("inFooterLeft", "fLeft");
+    bindMirror("inWatermark", "wm", v => String(v).toUpperCase());
+    $("inPageNum").addEventListener("input", (e) => $("fRight").textContent = String(e.target.value || "").toUpperCase());
+
+    // Background controls
+    function applyBg(){
+      const op = Number($("bgOpacity").value || 16) / 100; // 0..0.35
+      const blur = Number($("bgBlur").value || 2);
+      const scale = Number($("bgScale").value || 120) / 100;
+      const wash = Number($("washOpacity").value || 88) / 100;
+      const x = Number($("bgX").value || 50);
+      const y = Number($("bgY").value || 50);
+
+      const img = $("bgImg");
+      img.style.opacity = String(op);
+      img.style.filter = `saturate(.95) contrast(.95) blur(${blur}px)`;
+      img.style.left = x + "%";
+      img.style.top = y + "%";
+      img.style.width = (scale * 100) + "%";
+      img.style.height = (scale * 100) + "%";
+      img.style.transform = "translate(-50%,-50%)";
+
+      $("bgWash").style.opacity = String(wash);
+    }
+
+    ["bgOpacity","bgBlur","bgScale","washOpacity","bgX","bgY"].forEach(id=>{
+      $(id).addEventListener("input", applyBg);
+    });
+
+    $("bgFile").addEventListener("change", (e) => {
+      const f = e.target.files && e.target.files[0];
+      if(!f) return;
+      readFileToDataURL(f, (src) => {
+        $("bgImg").src = src;
+      });
+    });
+
+    // TOC
+    $("inToc").addEventListener("input", renderToc);
+
+    // Print / Reset
+    $("btnPrint").addEventListener("click", () => window.print());
+
+    $("btnReset").addEventListener("click", () => {
+      $("inHeaderLeft").value = "MỤC LỤC";
+      $("inHeaderCenter").value = "NEWHOMES • 2026";
+      $("inSectionCode").value = "01";
+      $("inPageNum").value = "01";
+      $("inTitle").value = "MỤC LỤC";
+      $("inSub").value = "Sale kit tổng quan năng lực & dự án 2026";
+      $("inFooterLeft").value = "NEWHOMES • 2026";
+      $("inWatermark").value = "01";
+
+      $("hLeft").textContent = "MỤC LỤC";
+      $("hCenter").textContent = "NEWHOMES • 2026";
+      $("hSection").textContent = "01";
+      $("hPage").textContent = "01";
+      $("tocTitle").textContent = "MỤC LỤC";
+      $("tocSub").textContent = "Sale kit tổng quan năng lực & dự án 2026";
+      $("fLeft").textContent = "NEWHOMES • 2026";
+      $("fRight").textContent = "01";
+      $("wm").textContent = "01";
+
+      // background defaults
+      $("bgFile").value = "";
+      $("bgImg").src = "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=2400&q=80";
+      $("bgOpacity").value = "16";
+      $("bgBlur").value = "2";
+      $("bgScale").value = "120";
+      $("washOpacity").value = "88";
+      $("bgX").value = "50";
+      $("bgY").value = "50";
+      applyBg();
+
+      renderToc();
+    });
+
+    // Init
+    renderToc();
+    $("fRight").textContent = $("inPageNum").value.toUpperCase();
+    applyBg();
+  </script>
+</body>
+</html>

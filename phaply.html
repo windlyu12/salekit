@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NewHomes — Thông tin pháp lý (Public, 1 Column, Fit A4)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* Espresso & Khaki Luxe (2026) */
+      --silhouette:#3D3635;
+      --charcoal:#5C534E;
+      --khaki:#B8A88A;
+      --cloud:#F5F5F0;
+      --espresso:#2C2826;
+      --linen:#D6CFC4;
+
+      --ui-bg:#0f0f12;
+      --ui-panel:rgba(255,255,255,.06);
+      --ui-border:rgba(255,255,255,.10);
+
+      --shadow:0 18px 50px rgba(44,40,38,.10);
+      --radius:16px;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      font-family:"Montserrat",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--ui-bg);
+      color:var(--espresso);
+    }
+
+    /* ===== App layout ===== */
+    .app{
+      min-height:100vh;
+      display:grid;
+      grid-template-columns: 400px 1fr;
+      gap:18px;
+      padding:18px;
+    }
+    .panel{
+      background:var(--ui-panel);
+      border:1px solid var(--ui-border);
+      border-radius:var(--radius);
+      padding:16px;
+      color:rgba(255,255,255,.92);
+      box-shadow:0 18px 45px rgba(0,0,0,.25);
+    }
+    .panel h2{
+      margin:0 0 12px;
+      font-size:14px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:700;
+    }
+    .group{
+      margin-top:14px;
+      padding-top:14px;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    label{
+      display:block;
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.70);
+      margin-bottom:6px;
+      font-weight:700;
+    }
+    input[type="text"], textarea{
+      width:100%;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.92);
+      border-radius:12px;
+      padding:10px 11px;
+      outline:none;
+      font-size:13px;
+    }
+    textarea{ min-height:74px; resize:vertical; line-height:1.35; }
+    .hint{
+      margin-top:8px;
+      font-size:12px;
+      line-height:1.35;
+      color:rgba(255,255,255,.70);
+    }
+    .btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+    button{
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.08);
+      color:rgba(255,255,255,.92);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:12px;
+    }
+    button.primary{
+      background:rgba(184,168,138,.25);
+      border-color:rgba(184,168,138,.35);
+    }
+
+    .stage{
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:4px 0 30px;
+      overflow:auto;
+    }
+
+    /* ===== A4 page ===== */
+    .page{
+      width:210mm;
+      height:297mm;
+      background:var(--cloud);
+      box-shadow:var(--shadow);
+      border-radius:0;
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* light wash (subtle, still prints fine) */
+    .pageWash{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(120% 70% at 14% 10%, rgba(184,168,138,.10) 0%, rgba(184,168,138,0) 56%),
+        radial-gradient(120% 70% at 12% 92%, rgba(214,207,196,.14) 0%, rgba(214,207,196,0) 62%);
+      opacity:.9;
+    }
+
+    /* Safe area 15mm */
+    .safe{
+      position:absolute;
+      inset:15mm;
+      display:flex;
+      flex-direction:column;
+      z-index:2;
+      height: calc(297mm - 30mm);
+    }
+
+    /* ===== Header / Footer ===== */
+    .header{
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items:end;
+      gap:10mm;
+      padding-bottom:4mm;
+      border-bottom:0.6pt solid var(--linen);
+      position:relative;
+      flex:0 0 auto;
+    }
+    .header::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:-0.9pt;
+      width:22mm;
+      height:2.2pt;
+      background: var(--khaki);
+      opacity:.95;
+    }
+    .h-left{
+      font-size:9pt;
+      font-weight:700;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--silhouette);
+    }
+    .h-center{
+      font-size:8.5pt;
+      font-weight:600;
+      letter-spacing:.10em;
+      color:rgba(92,83,78,.88);
+      white-space:nowrap;
+    }
+    .h-right{
+      justify-self:end;
+      display:flex;
+      gap:2.2mm;
+      align-items:baseline;
+      font-size:9pt;
+      font-weight:700;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--silhouette);
+      white-space:nowrap;
+    }
+    .h-right .sep{ opacity:.55; }
+
+    .footer{
+      margin-top:auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding-top:4mm;
+      border-top:0.6pt solid var(--linen);
+      color:rgba(92,83,78,.88);
+      font-size:8.5pt;
+      letter-spacing:.08em;
+      flex:0 0 auto;
+    }
+
+    /* ===== Content: one column, evenly distributed ===== */
+    .content{
+      padding-top:8mm;
+      display:flex;
+      flex-direction:column;
+      gap:0;
+      flex:1 1 auto;
+      min-height:0;
+    }
+
+    .titleBlock{
+      flex:0 0 auto;
+      display:flex;
+      flex-direction:column;
+      gap:2.4mm;
+      margin-bottom:4mm;
+    }
+    .title{
+      font-size:22.5pt;
+      font-weight:700;
+      letter-spacing:-0.01em;
+      text-transform:uppercase;
+      color:var(--espresso);
+      line-height:1.05;
+    }
+    .rule{
+      width:40mm;
+      border-top:2.6pt solid var(--khaki);
+      margin-top:0.6mm;
+      opacity:.95;
+    }
+    .sub{
+      font-size:10.2pt;
+      font-weight:500;
+      color:var(--charcoal);
+      line-height:1.45;
+      max-width: 170mm;
+    }
+
+    /* The stack fills remaining height so sections "dàn đều" */
+    .stack{
+      flex:1 1 auto;
+      min-height:0;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between; /* distribute sections */
+      gap:0;
+    }
+
+    .sec{
+      flex:0 0 auto;
+      padding:3.2mm 0; /* consistent spacing */
+    }
+
+    .secHead{
+      display:flex; align-items:center; gap:3mm;
+      margin-bottom:2.2mm;
+    }
+    .secCode{
+      font-size:8.2pt;
+      font-weight:700;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--silhouette);
+      white-space:nowrap;
+    }
+    .secLine{
+      flex:1;
+      border-top:0.6pt solid var(--linen);
+      transform: translateY(1px);
+    }
+
+    .table{
+      border-top:0.6pt solid rgba(214,207,196,.95);
+    }
+    .r{
+      display:grid;
+      grid-template-columns: 40mm 1fr;   /* compact but readable */
+      gap:5.5mm;
+      padding:2.15mm 0;
+      border-bottom:0.6pt solid rgba(214,207,196,.82);
+    }
+    .k{
+      font-size:8.4pt;
+      font-weight:700;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:rgba(92,83,78,.86);
+      line-height:1.25;
+    }
+    .v{
+      font-size:10.1pt;
+      font-weight:500;
+      color:rgba(44,40,38,.96);
+      line-height:1.32;
+    }
+    .v strong{ font-weight:700; color:var(--espresso); }
+
+    /* Branches: small, last section */
+    .branches .r{
+      grid-template-columns: 16mm 1fr;
+      padding:1.85mm 0;
+    }
+    .btag{
+      font-size:8.2pt;
+      font-weight:800;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(92,83,78,.86);
+      white-space:nowrap;
+    }
+    .baddr{
+      font-size:9.3pt;
+      font-weight:500;
+      color:rgba(44,40,38,.92);
+      line-height:1.22;
+    }
+
+    /* Editable */
+    [contenteditable="true"]{ outline:none; border-radius:6px; }
+    [contenteditable="true"]:focus{
+      box-shadow:0 0 0 2px rgba(184,168,138,.26);
+      background:rgba(184,168,138,.10);
+    }
+
+    /* ===== Print ===== */
+    @page { size:A4; margin:0; }
+    @media print{
+      html, body{
+        width:210mm !important;
+        height:297mm !important;
+        margin:0 !important;
+        padding:0 !important;
+        background:#fff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .panel{ display:none !important; }
+      .app{ display:block !important; padding:0 !important; margin:0 !important; background:#fff !important; }
+      .stage{ padding:0 !important; margin:0 !important; background:#fff !important; overflow:visible !important; }
+      .page{
+        position:fixed !important;
+        left:0 !important; top:0 !important;
+        width:210mm !important; height:297mm !important;
+        margin:0 !important;
+        box-shadow:none !important;
+      }
+    }
+
+    @media (max-width: 1150px){
+      .app{ grid-template-columns:1fr; }
+      .panel{ order:2; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- DASHBOARD -->
+    <aside class="panel">
+      <h2>Legal Editor (Public)</h2>
+
+      <div class="group">
+        <div class="row">
+          <div>
+            <label>Header trái</label>
+            <input id="inHeaderLeft" type="text" value="THÔNG TIN PHÁP LÝ">
+          </div>
+          <div>
+            <label>Header giữa</label>
+            <input id="inHeaderCenter" type="text" value="NEWHOMES • 2026">
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>Section code</label>
+            <input id="inSectionCode" type="text" value="02">
+          </div>
+          <div>
+            <label>Page number</label>
+            <input id="inPageNum" type="text" value="03">
+          </div>
+        </div>
+
+        <div class="btns">
+          <button class="primary" id="btnPrint">Export PDF (A4)</button>
+          <button id="btnReset">Reset</button>
+        </div>
+
+        <div class="hint">Layout 1 cột, các section tự “dàn đều” theo chiều cao trang để không tràn.</div>
+      </div>
+
+      <div class="group">
+        <label>Tiêu đề & mô tả</label>
+        <input id="inTitle" type="text" value="THÔNG TIN PHÁP LÝ">
+        <textarea id="inSub">Thông tin doanh nghiệp theo Giấy chứng nhận đăng ký doanh nghiệp (Công ty cổ phần).</textarea>
+      </div>
+
+      <div class="group">
+        <label>Chứng nhận</label>
+        <div class="row">
+          <div>
+            <label>Mã số doanh nghiệp</label>
+            <input id="inMaso" type="text" value="0801463578">
+          </div>
+          <div>
+            <label>Ngày ĐK lần đầu</label>
+            <input id="inNgayDK" type="text" value="06/08/2025">
+          </div>
+        </div>
+        <div style="margin-top:10px;">
+          <label>Đơn vị cấp</label>
+          <input id="inCoQuan" type="text" value="Sở Tài chính TP Hải Phòng • Phòng Đăng ký kinh doanh và Quản lý doanh nghiệp">
+        </div>
+      </div>
+
+      <div class="group">
+        <label>Doanh nghiệp</label>
+        <textarea id="inTenViet">CÔNG TY CP XÂY DỰNG VÀ NỘI THẤT NEWHOMES</textarea>
+        <textarea id="inTenEng" style="margin-top:10px;">NEWHOMES CONSTRUCTION AND INTERIOR JOINT STOCK COMPANY</textarea>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>Tên viết tắt</label>
+            <input id="inVietTat" type="text" value="NEWHOMES C&I., JSC">
+          </div>
+          <div>
+            <label>Điện thoại</label>
+            <input id="inPhone" type="text" value="0352254444">
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <label>Trụ sở chính</label>
+          <textarea id="inTruSo">Thôn Phú Lộc, Xã Tuệ Tĩnh, Thành phố Hải Phòng, Việt Nam</textarea>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>Email</label>
+            <input id="inEmail" type="text" value="ceo.huannguyen@gmail.com">
+          </div>
+          <div>
+            <label>Website</label>
+            <input id="inWeb" type="text" value="">
+          </div>
+        </div>
+      </div>
+
+      <div class="group">
+        <label>Đại diện pháp luật (Public)</label>
+        <div class="row">
+          <div>
+            <label>Họ tên</label>
+            <input id="inNguoiDD" type="text" value="NGUYỄN VĂN HUÂN">
+          </div>
+          <div>
+            <label>Chức danh</label>
+            <input id="inChucDanh" type="text" value="Giám đốc">
+          </div>
+        </div>
+        <div style="margin-top:10px;">
+          <label>Quốc tịch</label>
+          <input id="inQuocTich" type="text" value="Việt Nam">
+        </div>
+      </div>
+
+      <div class="group">
+        <label>Địa chỉ chi nhánh (3 dòng — chữ nhỏ)</label>
+        <div class="row">
+          <div>
+            <label>CN 01 — Tag</label>
+            <input id="b1tag" type="text" value="CN01">
+          </div>
+          <div>
+            <label>CN 01 — Địa chỉ</label>
+            <input id="b1addr" type="text" value="">
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>CN 02 — Tag</label>
+            <input id="b2tag" type="text" value="CN02">
+          </div>
+          <div>
+            <label>CN 02 — Địa chỉ</label>
+            <input id="b2addr" type="text" value="">
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label>CN 03 — Tag</label>
+            <input id="b3tag" type="text" value="CN03">
+          </div>
+          <div>
+            <label>CN 03 — Địa chỉ</label>
+            <input id="b3addr" type="text" value="">
+          </div>
+        </div>
+      </div>
+
+      <div class="group">
+        <label>Footer trái</label>
+        <input id="inFooterLeft" type="text" value="NEWHOMES • 2026">
+      </div>
+    </aside>
+
+    <!-- PREVIEW -->
+    <main class="stage">
+      <section class="page" aria-label="A4 Legal Public 1 Column Fit">
+        <div class="pageWash" aria-hidden="true"></div>
+
+        <div class="safe">
+          <!-- Header -->
+          <div class="header">
+            <div id="hLeft" class="h-left" contenteditable="true">THÔNG TIN PHÁP LÝ</div>
+            <div id="hCenter" class="h-center" contenteditable="true">NEWHOMES • 2026</div>
+            <div class="h-right">
+              <span id="hSection" contenteditable="true">02</span>
+              <span class="sep">•</span>
+              <span id="hPage" contenteditable="true">03</span>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="content">
+            <div class="titleBlock">
+              <div id="title" class="title" contenteditable="true">THÔNG TIN PHÁP LÝ</div>
+              <div class="rule" aria-hidden="true"></div>
+              <div id="sub" class="sub" contenteditable="true">
+                Thông tin doanh nghiệp theo Giấy chứng nhận đăng ký doanh nghiệp (Công ty cổ phần).
+              </div>
+            </div>
+
+            <!-- Evenly distributed stack -->
+            <div class="stack">
+              <!-- CERT -->
+              <div class="sec">
+                <div class="secHead">
+                  <div class="secCode" contenteditable="true">CHỨNG NHẬN</div>
+                  <div class="secLine" aria-hidden="true"></div>
+                </div>
+                <div class="table">
+                  <div class="r">
+                    <div class="k" contenteditable="true">Mã số DN</div>
+                    <div class="v" id="vMaso" contenteditable="true"><strong>0801463578</strong></div>
+                  </div>
+                  <div class="r">
+                    <div class="k" contenteditable="true">ĐK lần đầu</div>
+                    <div class="v" id="vNgayDK" contenteditable="true">06/08/2025</div>
+                  </div>
+                  <div class="r">
+                    <div class="k" contenteditable="true">Đơn vị cấp</div>
+                    <div class="v" id="vCoQuan" contenteditable="true">Sở Tài chính TP Hải Phòng • Phòng ĐKKD &amp; QLDN</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- COMPANY -->
+              <div class="sec">
+                <div class="secHead">
+                  <div class="secCode" contenteditable="true">DOANH NGHIỆP</div>
+                  <div class="secLine" aria-hidden="true"></div>
+                </div>
+                <div class="table">
+                  <div class="r">
+                    <div class="k" contenteditable="true">Tên (VI)</div>
+                    <div class="v" id="vTenViet" contenteditable="true"><strong>CÔNG TY CP XÂY DỰNG VÀ NỘI THẤT NEWHOMES</strong></div>
+                  </div>
+                  <div class="r">
+                    <div class="k" contenteditable="true">Tên (EN)</div>
+                    <div class="v" id="vTenEng" contenteditable="true">NEWHOMES CONSTRUCTION AND INTERIOR JOINT STOCK COMPANY</div>
+                  </div>
+                  <div class="r">
+                    <div class="k" contenteditable="true">Viết tắt</div>
+                    <div class="v" id="vVietTat" contenteditable="true">NEWHOMES C&amp;I., JSC</div>
+                  </div>
+                  <div class="r">
+                    <div class="k" contenteditable="true">Trụ sở</div>
+                    <div class="v" id="vTruSo" contenteditable="true">Thôn Phú Lộc, Xã Tuệ Tĩnh, Thành phố Hải Phòng, Việt Nam</div>
+                  </div>
+                  <div class="r">
+                    <div class="k" contenteditable="true">Liên hệ</div>
+                    <div class="v" id="vLienHe" contenteditable="true">0352254444 • ceo.huannguyen@gmail.com • —</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- LEGAL REP -->
+              <div class="sec">
+                <div class="secHead">
+                  <div class="secCode" contenteditable="true">ĐẠI DIỆN PHÁP LUẬT</div>
+                  <div class="secLine" aria-hidden="true"></div>
+                </div>
+                <div class="table">
+                  <div class="r">
+                    <div class="k" contenteditable="true">Họ tên</div>
+                    <div class="v" id="vNguoiDD" contenteditable="true"><strong>NGUYỄN VĂN HUÂN</strong></div>
+                  </div>
+                  <div class="r">
+                    <div class="k" contenteditable="true">Chức danh</div>
+                    <div class="v" id="vChucDanh" contenteditable="true">Giám đốc</div>
+                  </div>
+                  <div class="r">
+                    <div class="k" contenteditable="true">Quốc tịch</div>
+                    <div class="v" id="vQuocTich" contenteditable="true">Việt Nam</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- BRANCHES (small, last) -->
+              <div class="sec branches">
+                <div class="secHead">
+                  <div class="secCode" contenteditable="true">ĐỊA CHỈ CHI NHÁNH</div>
+                  <div class="secLine" aria-hidden="true"></div>
+                </div>
+                <div class="table">
+                  <div class="r">
+                    <div class="btag" id="b1tagV" contenteditable="true">CN01</div>
+                    <div class="baddr" id="b1addrV" contenteditable="true">—</div>
+                  </div>
+                  <div class="r">
+                    <div class="btag" id="b2tagV" contenteditable="true">CN02</div>
+                    <div class="baddr" id="b2addrV" contenteditable="true">—</div>
+                  </div>
+                  <div class="r">
+                    <div class="btag" id="b3tagV" contenteditable="true">CN03</div>
+                    <div class="baddr" id="b3addrV" contenteditable="true">—</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="footer">
+            <div id="fLeft" contenteditable="true">NEWHOMES • 2026</div>
+            <div id="fRight" contenteditable="true">03</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[c]));
+    }
+    function bindMirror(inputId, fn){
+      $(inputId).addEventListener("input", (e) => fn(e.target.value ?? ""));
+    }
+
+    // Header / footer / title
+    bindMirror("inHeaderLeft", v => $("hLeft").textContent = String(v).toUpperCase());
+    bindMirror("inHeaderCenter", v => $("hCenter").textContent = String(v));
+    bindMirror("inSectionCode", v => $("hSection").textContent = String(v).toUpperCase());
+    bindMirror("inPageNum", v => {
+      const vv = String(v).toUpperCase();
+      $("hPage").textContent = vv;
+      $("fRight").textContent = vv;
+    });
+    bindMirror("inTitle", v => $("title").textContent = String(v).toUpperCase());
+    $("inSub").addEventListener("input", e => $("sub").textContent = String(e.target.value || ""));
+    bindMirror("inFooterLeft", v => $("fLeft").textContent = String(v));
+
+    // Cert
+    bindMirror("inMaso", v => $("vMaso").innerHTML = "<strong>" + escapeHtml(v) + "</strong>");
+    bindMirror("inNgayDK", v => $("vNgayDK").textContent = String(v));
+    bindMirror("inCoQuan", v => $("vCoQuan").textContent = String(v));
+
+    // Company
+    $("inTenViet").addEventListener("input", e => $("vTenViet").innerHTML = "<strong>" + escapeHtml(e.target.value || "") + "</strong>");
+    $("inTenEng").addEventListener("input", e => $("vTenEng").textContent = String(e.target.value || ""));
+    bindMirror("inVietTat", v => $("vVietTat").innerHTML = escapeHtml(v));
+    $("inTruSo").addEventListener("input", e => $("vTruSo").textContent = String(e.target.value || ""));
+
+    function syncLienHe(){
+      const phone = ($("inPhone").value || "").trim();
+      const email = ($("inEmail").value || "").trim();
+      const web = ($("inWeb").value || "").trim();
+      const parts = [];
+      if(phone) parts.push(phone);
+      if(email) parts.push(email);
+      parts.push(web ? web : "—");
+      $("vLienHe").textContent = parts.join(" • ");
+    }
+    $("inPhone").addEventListener("input", syncLienHe);
+    $("inEmail").addEventListener("input", syncLienHe);
+    $("inWeb").addEventListener("input", syncLienHe);
+
+    // Legal rep
+    bindMirror("inNguoiDD", v => $("vNguoiDD").innerHTML = "<strong>" + escapeHtml(v) + "</strong>");
+    bindMirror("inChucDanh", v => $("vChucDanh").textContent = String(v));
+    bindMirror("inQuocTich", v => $("vQuocTich").textContent = String(v));
+
+    // Branches
+    function syncBranch(n){
+      const tag = ($("b"+n+"tag").value || "").trim();
+      const addr = ($("b"+n+"addr").value || "").trim();
+      $("b"+n+"tagV").textContent = (tag ? tag : ("CN0"+n)).toUpperCase();
+      $("b"+n+"addrV").textContent = addr ? addr : "—";
+    }
+    ["1","2","3"].forEach(n => {
+      $("b"+n+"tag").addEventListener("input", () => syncBranch(n));
+      $("b"+n+"addr").addEventListener("input", () => syncBranch(n));
+      syncBranch(n);
+    });
+
+    // Print & reset
+    $("btnPrint").addEventListener("click", () => window.print());
+    $("btnReset").addEventListener("click", () => location.reload());
+
+    // Init
+    syncLienHe();
+    $("fRight").textContent = ($("inPageNum").value || "03").toUpperCase();
+  </script>
+</body>
+</html>
