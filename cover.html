@@ -476,9 +476,17 @@
             <input id="qrFile" type="file" accept="image/*">
           </div>
           <div>
+            <label>Logo Size (mm)</label>
+            <input id="logoSizeRange" type="range" min="6" max="20" value="10">
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
             <label>Edition</label>
             <input id="editionInput" type="text" value="2026 EDITION">
           </div>
+          <div></div>
         </div>
 
         <div class="hint">
@@ -783,6 +791,23 @@
     // Overlay
     $("overlayRange").addEventListener("input", applyOverlay);
 
+    // Logo size (scales logo, brand name, and tagline proportionally)
+    const defaultLogoSize = 10; // mm
+    const defaultBrandNameSize = 10.6; // pt
+    const defaultBrandTagSize = 8.8; // pt
+
+    function applyLogoSize(size) {
+      const scale = size / defaultLogoSize;
+      logoImg.style.height = size + "mm";
+      $("brandName").style.fontSize = (defaultBrandNameSize * scale) + "pt";
+      $("brandTag").style.fontSize = (defaultBrandTagSize * scale) + "pt";
+    }
+
+    $("logoSizeRange").addEventListener("input", (e) => {
+      const size = Number(e.target.value || 10);
+      applyLogoSize(size);
+    });
+
     // Export / Reset
     $("exportBtn").addEventListener("click", () => window.print());
 
@@ -803,6 +828,8 @@
       // Use transparent 1x1 pixel to avoid broken image icon
       logoImg.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
       logoImg.classList.add("is-empty");
+      $("logoSizeRange").value = "10";
+      applyLogoSize(10);
 
       $("editionInput").value = "2026 EDITION";
       $("kickerInput").value = "SALE KIT";
