@@ -205,7 +205,7 @@
     .brand-left{
       display:flex;
       gap: 4.5mm;
-      align-items:flex-start;
+      align-items:center;
       min-width: 0;
     }
 
@@ -791,16 +791,16 @@
     // Overlay
     $("overlayRange").addEventListener("input", applyOverlay);
 
-    // Logo size (scales logo and brand block proportionally)
+    // Logo size (logo height = 1.5x brand block height, brand centered)
     const defaultLogoSize = 10; // mm
     const brandBlock = $("brandBlock");
 
     function applyLogoSize(size) {
-      const scale = size / defaultLogoSize;
+      const scale = size / defaultLogoSize / 1.5; // brand = logo / 1.5
       logoImg.style.height = size + "mm";
-      // Scale entire brand block to match logo height
+      // Scale brand block to 1/1.5 of logo height, centered vertically
       brandBlock.style.transform = `scale(${scale})`;
-      brandBlock.style.transformOrigin = "top left";
+      brandBlock.style.transformOrigin = "left center";
     }
 
     $("logoSizeRange").addEventListener("input", (e) => {
