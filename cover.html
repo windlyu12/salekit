@@ -257,9 +257,6 @@
       border-radius: 0;
       background: rgba(245,245,240,.62);
       border: 1px solid rgba(214,207,196,.80);
-      box-shadow: 0 10px 26px rgba(44,40,38,.10);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
       color: var(--silhouette);
       flex: 0 0 auto;
     }
@@ -412,13 +409,9 @@
       .stage{ padding:0; }
       .page{ box-shadow:none; cursor: default; }
 
-      /* Fix black squares: disable filters, shadows, and backdrop-filter */
+      /* Fix black squares: disable filters and shadows */
       .edition{
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
         background: #F5F5F0 !important;
-        box-shadow: none !important;
-        filter: none !important;
       }
       .qr::before{
         display: none !important;
