@@ -541,7 +541,7 @@
         <div class="safe">
           <div class="topbar">
             <div class="brand-left">
-              <img id="logoImg" class="logo is-empty" alt="Logo" />
+              <img id="logoImg" class="logo is-empty" alt="Logo" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
               <div class="brand">
                 <div id="brandName" class="brand-name">NEWHOMES</div>
                 <div id="brandTag" class="brand-tag">Interior Design • Build • Production</div>
@@ -768,7 +768,8 @@
       applyHero();
       applyOverlay();
 
-      logoImg.removeAttribute("src");
+      // Use transparent 1x1 pixel to avoid broken image icon
+      logoImg.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
       logoImg.classList.add("is-empty");
 
       $("editionInput").value = "2026 EDITION";
