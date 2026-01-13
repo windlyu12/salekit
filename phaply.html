@@ -293,19 +293,19 @@
       max-width: 170mm;
     }
 
-    /* The stack fills remaining height so sections "dàn đều" */
+    /* The stack fills remaining height */
     .stack{
       flex:1 1 auto;
       min-height:0;
       display:flex;
       flex-direction:column;
-      justify-content:space-between; /* distribute sections */
-      gap:0;
+      justify-content:flex-start;
+      gap:3mm; /* reduced gap between sections */
     }
 
     .sec{
       flex:0 0 auto;
-      padding:3.2mm 0; /* consistent spacing */
+      padding:1.6mm 0; /* halved spacing */
     }
 
     .secHead{
