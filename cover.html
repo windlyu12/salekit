@@ -818,9 +818,9 @@
         const dx = (p.x - startX) / rect.width;   // -..+
         const dy = (p.y - startY) / rect.height;
 
-        // Invert so dragging right moves image focus right naturally
-        heroPosX = clamp(startPosX + dx * 60, 0, 100);
-        heroPosY = clamp(startPosY + dy * 60, 0, 100);
+        // Drag naturally: grab and move image (dragging right moves image right)
+        heroPosX = clamp(startPosX - dx * 60, 0, 100);
+        heroPosY = clamp(startPosY - dy * 60, 0, 100);
         applyHero();
         ev.preventDefault();
       }
