@@ -791,10 +791,21 @@
     // Overlay
     $("overlayRange").addEventListener("input", applyOverlay);
 
-    // Logo size
+    // Logo size (scales logo, brand name, and tagline proportionally)
+    const defaultLogoSize = 10; // mm
+    const defaultBrandNameSize = 10.6; // pt
+    const defaultBrandTagSize = 8.8; // pt
+
+    function applyLogoSize(size) {
+      const scale = size / defaultLogoSize;
+      logoImg.style.height = size + "mm";
+      $("brandName").style.fontSize = (defaultBrandNameSize * scale) + "pt";
+      $("brandTag").style.fontSize = (defaultBrandTagSize * scale) + "pt";
+    }
+
     $("logoSizeRange").addEventListener("input", (e) => {
       const size = Number(e.target.value || 10);
-      logoImg.style.height = size + "mm";
+      applyLogoSize(size);
     });
 
     // Export / Reset
@@ -817,8 +828,8 @@
       // Use transparent 1x1 pixel to avoid broken image icon
       logoImg.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
       logoImg.classList.add("is-empty");
-      logoImg.style.height = "10mm";
       $("logoSizeRange").value = "10";
+      applyLogoSize(10);
 
       $("editionInput").value = "2026 EDITION";
       $("kickerInput").value = "SALE KIT";
